@@ -16,9 +16,12 @@ public:
 
 	friend std::ostream &operator<<(std::ostream &os, BigInt const &i);
 
+	friend int cmp(BigInt const &a, BigInt const &b);
+	int cmp(BigInt const &b) const;
+	friend int cmp_abs(BigInt const &a, BigInt const &b);
+	int cmp_abs(BigInt const &b) const;
+
 	// Comparison operators
-	friend int compare(BigInt const &a, BigInt const &b);
-	friend int compare_abs(BigInt const &a, BigInt const &b);
 	friend bool operator==(BigInt const &lhs, BigInt const &rhs);
 	friend bool operator!=(BigInt const &lhs, BigInt const &rhs);
 	friend bool operator<(BigInt const &lhs, BigInt const &rhs);
