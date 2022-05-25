@@ -23,3 +23,10 @@ BigInt::BigInt(long long int n) {
 	ss << n;
 	*this = BigInt(ss.str());
 }
+
+std::ostream &operator<<(std::ostream &os, const BigInt &i) {
+	if(i.m_negative) os << '-';
+	for(unsigned char c: i.m_digits)
+		os << (char) (c + '0');
+	return os;
+}
