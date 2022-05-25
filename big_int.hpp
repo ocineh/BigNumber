@@ -13,7 +13,6 @@ public:
 
 	explicit BigInt(std::string const &str);
 	explicit BigInt(long long int n);
-	explicit BigInt(unsigned long long int n);
 
 	friend std::ostream &operator<<(std::ostream &os, BigInt const &i);
 
