@@ -69,3 +69,27 @@ int cmp_abs(const BigInt &a, const BigInt &b) {
 int BigInt::cmp_abs(const BigInt &b) const {
 	return ::cmp_abs(*this, b);
 }
+
+bool operator==(const BigInt &lhs, const BigInt &rhs) {
+	return cmp(lhs, rhs) == 0;
+}
+
+bool operator!=(const BigInt &lhs, const BigInt &rhs) {
+	return cmp(lhs, rhs) != 0;
+}
+
+bool operator<(const BigInt &lhs, const BigInt &rhs) {
+	return cmp(lhs, rhs) < 0;
+}
+
+bool operator>(const BigInt &lhs, const BigInt &rhs) {
+	return cmp(lhs, rhs) > 0;
+}
+
+bool operator<=(const BigInt &lhs, const BigInt &rhs) {
+	return cmp(lhs, rhs) <= 0;
+}
+
+bool operator>=(const BigInt &lhs, const BigInt &rhs) {
+	return cmp(lhs, rhs) >= 0;
+}
