@@ -43,6 +43,10 @@ public:
 	friend BigInt operator/(BigInt const &lhs, BigInt const &rhs);
 	friend BigInt operator%(BigInt const &lhs, BigInt const &rhs);
 
+	// Arithemtic assignment operators
+	BigInt &operator+=(BigInt const &rhs);
+	BigInt &operator-=(BigInt const &rhs);
+
 private:
 	bool m_negative = false;
 	std::list<unsigned char> m_digits;
