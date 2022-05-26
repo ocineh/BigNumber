@@ -63,6 +63,8 @@ public:
 	BigInt &operator+=(BigInt const &rhs);
 	BigInt &operator-=(BigInt const &rhs);
 	BigInt &operator*=(BigInt const &rhs);
+	BigInt &operator/=(BigInt const &rhs);
+	BigInt &operator%=(BigInt const &rhs);
 	BigInt &operator<<=(long long unsigned int rhs);
 	BigInt &operator>>=(long long unsigned int rhs);
 

@@ -303,3 +303,19 @@ std::pair<BigInt, BigInt> division(const BigInt &a, const BigInt &b) {
 	if(!quotient.is_zero()) quotient.m_negative = a.m_negative ^ b.m_negative;
 	return { quotient, remainder };
 }
+
+BigInt operator/(const BigInt &lhs, const BigInt &rhs) {
+	return division(lhs, rhs).first;
+}
+
+BigInt operator%(const BigInt &lhs, const BigInt &rhs) {
+	return division(lhs, rhs).second;
+}
+
+BigInt &BigInt::operator/=(const BigInt &rhs) {
+	return *this = *this / rhs;
+}
+
+BigInt &BigInt::operator%=(const BigInt &rhs) {
+	return *this = *this % rhs;
+}
