@@ -170,3 +170,23 @@ BigInt &BigInt::operator+=(const BigInt &rhs) {
 BigInt &BigInt::operator-=(const BigInt &rhs) {
 	return *this = *this - rhs;
 }
+
+BigInt &operator--(BigInt &i) {
+	return i -= BigInt{ 1 };
+}
+
+BigInt &operator++(BigInt &i) {
+	return i += BigInt{ 1 };
+}
+
+BigInt operator--(BigInt &i, int) {
+	BigInt temp{ i };
+	i -= BigInt{ 1 };
+	return temp;
+}
+
+BigInt operator++(BigInt &i, int) {
+	BigInt temp{ i };
+	i += BigInt{ 1 };
+	return temp;
+}

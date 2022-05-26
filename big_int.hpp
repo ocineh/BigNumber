@@ -31,10 +31,14 @@ public:
 
 	// Unary operators
 	friend BigInt operator-(BigInt const &i);
-	friend BigInt operator--(BigInt const &i);
-	friend BigInt operator++(BigInt const &i);
-	friend BigInt operator--(BigInt &i);
-	friend BigInt operator++(BigInt &i);
+
+	// pre-(in/de)crement
+	friend BigInt &operator--(BigInt &i);
+	friend BigInt &operator++(BigInt &i);
+
+	// post-(in/de)crement
+	friend BigInt operator--(BigInt &i, int);
+	friend BigInt operator++(BigInt &i, int);
 
 	// Arithmetic operators
 	friend BigInt operator+(BigInt const &lhs, BigInt const &rhs);
