@@ -21,6 +21,9 @@ public:
 	friend int cmp_abs(BigInt const &a, BigInt const &b);
 	int cmp_abs(BigInt const &b) const;
 
+	friend BigInt abs(BigInt const &a);
+	BigInt abs() const;
+
 	// Comparison operators
 	friend bool operator==(BigInt const &lhs, BigInt const &rhs);
 	friend bool operator!=(BigInt const &lhs, BigInt const &rhs);

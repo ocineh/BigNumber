@@ -206,3 +206,14 @@ BigInt operator>>(const BigInt &lhs, unsigned long long int rhs) {
 		result.m_digits.push_front(0);
 	result.strip();
 }
+
+BigInt abs(BigInt const &a) {
+	BigInt result{ a };
+	result.m_negative = false;
+	return result;
+}
+
+BigInt BigInt::abs() const {
+	return ::abs(*this);
+}
+
