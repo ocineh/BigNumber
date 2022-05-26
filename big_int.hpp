@@ -29,6 +29,7 @@ public:
 	friend bool is_NaN(BigInt const &a);
 	bool is_NaN() const;
 
+	friend std::pair<BigInt, BigInt> division(BigInt const &lhs, BigInt const &rhs);
 
 	// Comparison operators
 	friend bool operator==(BigInt const &lhs, BigInt const &rhs);

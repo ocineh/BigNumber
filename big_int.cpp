@@ -198,7 +198,7 @@ BigInt &BigInt::operator<<=(unsigned long long int rhs) {
 }
 
 BigInt &BigInt::operator>>=(unsigned long long int rhs) {
-	while(rhs-- > 0 && !m_digits.empty()) m_digits.pop_front();
+	while(rhs-- > 0 && !m_digits.empty()) m_digits.pop_back();
 	if(m_digits.empty()) m_digits.push_front(0);
 	return *this;
 }
@@ -272,4 +272,34 @@ bool is_NaN(const BigInt &a) {
 
 bool BigInt::is_NaN() const {
 	return ::is_NaN(*this);
+}
+
+std::pair<BigInt, BigInt> division(const BigInt &a, const BigInt &b) {
+	if(is_zero(a) || is_zero(b)) return { BigInt{ 0 }, BigInt{ 0 }};
+	if(b.m_digits.size() == 1 && b.m_digits.front() == 1) {
+		BigInt quotient{ a };
+		quotient.m_negative = a.m_negative ^ b.m_negative;
+		return { quotient, BigInt{ 0 }};
+	}
+
+	BigInt divisor{ b.abs() }, pas{ divisor }, count{ 1 };
+	BigInt quotient{ 0 }, remainder{ a.abs() };
+	if(pas.m_digits.size() < remainder.m_digits.size()) {
+		long long unsigned len = remainder.m_digits.size() - pas.m_digits.size();
+		pas <<= len;
+		count <<= len;
+	}
+
+	while(remainder >= divisor) {
+		while(remainder < pas) {
+			pas >>= 1;
+			count >>= 1;
+		}
+		remainder -= pas;
+		quotient += count;
+	}
+
+	if(!remainder.is_zero()) remainder.m_negative = a.m_negative;
+	if(!quotient.is_zero()) quotient.m_negative = a.m_negative ^ b.m_negative;
+	return { quotient, remainder };
 }
