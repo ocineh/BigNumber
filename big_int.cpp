@@ -152,3 +152,13 @@ BigInt operator+(const BigInt &lhs, const BigInt &rhs) {
 	result.strip();
 	return result;
 }
+
+BigInt operator-(BigInt const &i) {
+	BigInt result{ i };
+	result.m_negative = !result.m_negative;
+	return result;
+}
+
+BigInt operator-(BigInt const &lhs, BigInt const &rhs) {
+	return lhs + -rhs;
+}

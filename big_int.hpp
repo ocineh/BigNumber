@@ -33,7 +33,6 @@ public:
 	friend BigInt operator-(BigInt const &i);
 	friend BigInt operator--(BigInt const &i);
 	friend BigInt operator++(BigInt const &i);
-	friend BigInt operator-(BigInt &i);
 	friend BigInt operator--(BigInt &i);
 	friend BigInt operator++(BigInt &i);
 
