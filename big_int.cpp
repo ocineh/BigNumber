@@ -190,3 +190,19 @@ BigInt operator++(BigInt &i, int) {
 	i += BigInt{ 1 };
 	return temp;
 }
+
+BigInt operator<<(const BigInt &lhs, unsigned long long int rhs) {
+	BigInt result{ lhs };
+	while(--rhs >= 0) result.m_digits.push_back(0);
+	result.strip();
+	return result;
+}
+
+BigInt operator>>(const BigInt &lhs, unsigned long long int rhs) {
+	BigInt result{ lhs };
+	while(--rhs >= 0 && !result.m_digits.empty())
+		result.m_digits.pop_front();
+	if(result.m_digits.empty())
+		result.m_digits.push_front(0);
+	result.strip();
+}

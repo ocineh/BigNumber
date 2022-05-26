@@ -46,6 +46,8 @@ public:
 	friend BigInt operator*(BigInt const &lhs, BigInt const &rhs);
 	friend BigInt operator/(BigInt const &lhs, BigInt const &rhs);
 	friend BigInt operator%(BigInt const &lhs, BigInt const &rhs);
+	friend BigInt operator<<(BigInt const &lhs, long long unsigned int rhs);
+	friend BigInt operator>>(BigInt const &lhs, long long unsigned int rhs);
 
 	// Arithemtic assignment operators
 	BigInt &operator+=(BigInt const &rhs);
