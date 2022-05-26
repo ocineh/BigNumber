@@ -55,6 +55,7 @@ public:
 	// Arithemtic assignment operators
 	BigInt &operator+=(BigInt const &rhs);
 	BigInt &operator-=(BigInt const &rhs);
+	BigInt &operator*=(BigInt const &rhs);
 	BigInt &operator<<=(long long unsigned int rhs);
 	BigInt &operator>>=(long long unsigned int rhs);
 
@@ -63,6 +64,7 @@ private:
 	std::list<unsigned char> m_digits;
 
 	void strip();
+	BigInt mul_digit(unsigned char digit) const;
 };
 
 #endif //BIGINT_BIG_INT_HPP

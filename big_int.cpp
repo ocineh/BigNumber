@@ -192,15 +192,14 @@ BigInt operator++(BigInt &i, int) {
 }
 
 BigInt &BigInt::operator<<=(unsigned long long int rhs) {
-	while(--rhs >= 0) m_digits.push_back(0);
+	while(rhs-- > 0) m_digits.push_back(0);
 	strip();
 	return *this;
 }
 
 BigInt &BigInt::operator>>=(unsigned long long int rhs) {
-	while(--rhs >= 0 && !m_digits.empty()) m_digits.pop_front();
+	while(rhs-- > 0 && !m_digits.empty()) m_digits.pop_front();
 	if(m_digits.empty()) m_digits.push_front(0);
-	strip();
 	return *this;
 }
 
@@ -220,4 +219,41 @@ BigInt abs(BigInt const &a) {
 
 BigInt BigInt::abs() const {
 	return ::abs(*this);
+}
+
+BigInt BigInt::mul_digit(unsigned char digit) const {
+	if(digit == 0) return BigInt{ 0 };
+	if(digit == 1) return this->abs();
+
+	BigInt result;
+	result.m_negative = false;
+	auto i = m_digits.rbegin(), end = m_digits.rend();
+	int carry = 0, mul;
+	for(; i != end; ++i) {
+		mul = *i * digit + carry;
+		carry = mul / 10;
+		result.m_digits.push_front(mul % 10);
+	}
+	if(carry != 0) result.m_digits.push_front(carry);
+	return result;
+}
+
+BigInt operator*(const BigInt &lhs, const BigInt &rhs) {
+	bool reverse = lhs.m_digits.size() < rhs.m_digits.size();
+	const BigInt &multiplicand = reverse ? rhs : lhs;
+	const BigInt &multiplier = reverse ? lhs : rhs;
+
+	auto i = multiplier.m_digits.rbegin();
+	auto end = multiplier.m_digits.rend();
+	BigInt result{ 0 };
+	unsigned long long rand = 0;
+	for(; i != end; ++i, ++rand)
+		if(*i != 0)
+			result += multiplicand.mul_digit(*i) <<= rand;
+	result.m_negative = lhs.m_negative ^ rhs.m_negative;
+	return result;
+}
+
+BigInt &BigInt::operator*=(const BigInt &rhs) {
+	return *this = *this * rhs;
 }
