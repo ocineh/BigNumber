@@ -191,20 +191,25 @@ BigInt operator++(BigInt &i, int) {
 	return temp;
 }
 
+BigInt &BigInt::operator<<=(unsigned long long int rhs) {
+	while(--rhs >= 0) m_digits.push_back(0);
+	strip();
+	return *this;
+}
+
+BigInt &BigInt::operator>>=(unsigned long long int rhs) {
+	while(--rhs >= 0 && !m_digits.empty()) m_digits.pop_front();
+	if(m_digits.empty()) m_digits.push_front(0);
+	strip();
+	return *this;
+}
+
 BigInt operator<<(const BigInt &lhs, unsigned long long int rhs) {
-	BigInt result{ lhs };
-	while(--rhs >= 0) result.m_digits.push_back(0);
-	result.strip();
-	return result;
+	return BigInt{ lhs } <<= rhs;
 }
 
 BigInt operator>>(const BigInt &lhs, unsigned long long int rhs) {
-	BigInt result{ lhs };
-	while(--rhs >= 0 && !result.m_digits.empty())
-		result.m_digits.pop_front();
-	if(result.m_digits.empty())
-		result.m_digits.push_front(0);
-	result.strip();
+	return BigInt{ lhs } >>= rhs;
 }
 
 BigInt abs(BigInt const &a) {
@@ -216,4 +221,3 @@ BigInt abs(BigInt const &a) {
 BigInt BigInt::abs() const {
 	return ::abs(*this);
 }
-

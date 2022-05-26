@@ -55,6 +55,8 @@ public:
 	// Arithemtic assignment operators
 	BigInt &operator+=(BigInt const &rhs);
 	BigInt &operator-=(BigInt const &rhs);
+	BigInt &operator<<=(long long unsigned int rhs);
+	BigInt &operator>>=(long long unsigned int rhs);
 
 private:
 	bool m_negative = false;
