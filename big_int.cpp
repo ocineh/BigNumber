@@ -257,3 +257,19 @@ BigInt operator*(const BigInt &lhs, const BigInt &rhs) {
 BigInt &BigInt::operator*=(const BigInt &rhs) {
 	return *this = *this * rhs;
 }
+
+bool is_zero(const BigInt &a) {
+	return a.m_digits.size() == 1 && a.m_digits.front() == 0;
+}
+
+bool BigInt::is_zero() const {
+	return ::is_zero(*this);
+}
+
+bool is_NaN(const BigInt &a) {
+	return a.m_digits.empty();
+}
+
+bool BigInt::is_NaN() const {
+	return ::is_NaN(*this);
+}

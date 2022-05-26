@@ -24,6 +24,12 @@ public:
 	friend BigInt abs(BigInt const &a);
 	BigInt abs() const;
 
+	friend bool is_zero(BigInt const &a);
+	bool is_zero() const;
+	friend bool is_NaN(BigInt const &a);
+	bool is_NaN() const;
+
+
 	// Comparison operators
 	friend bool operator==(BigInt const &lhs, BigInt const &rhs);
 	friend bool operator!=(BigInt const &lhs, BigInt const &rhs);
