@@ -73,6 +73,18 @@ public:
 	friend BigInt operator<<(BigInt const &lhs, long long unsigned int rhs);
 	friend BigInt operator>>(BigInt const &lhs, long long unsigned int rhs);
 
+	friend BigInt operator+(BigInt const &lhs, long long rhs);
+	friend BigInt operator-(BigInt const &lhs, long long rhs);
+	friend BigInt operator*(BigInt const &lhs, long long rhs);
+	friend BigInt operator/(BigInt const &lhs, long long rhs);
+	friend BigInt operator%(BigInt const &lhs, long long rhs);
+
+	friend BigInt operator+(long long lhs, BigInt const &rhs);
+	friend BigInt operator-(long long lhs, BigInt const &rhs);
+	friend BigInt operator*(long long lhs, BigInt const &rhs);
+	friend BigInt operator/(long long lhs, BigInt const &rhs);
+	friend BigInt operator%(long long lhs, BigInt const &rhs);
+
 	// Assignment operators
 	BigInt &operator=(BigInt const &other) = default;
 	BigInt &operator=(long long n);

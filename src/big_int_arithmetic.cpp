@@ -135,3 +135,43 @@ BigInt operator/(const BigInt &lhs, const BigInt &rhs) {
 BigInt operator%(const BigInt &lhs, const BigInt &rhs) {
 	return division(lhs, rhs).second;
 }
+
+BigInt operator+(const BigInt &lhs, long long int rhs) {
+	return lhs + BigInt{ rhs };
+}
+
+BigInt operator-(const BigInt &lhs, long long int rhs) {
+	return lhs - BigInt{ rhs };
+}
+
+BigInt operator*(const BigInt &lhs, long long int rhs) {
+	return lhs * BigInt{ rhs };
+}
+
+BigInt operator/(const BigInt &lhs, long long int rhs) {
+	return lhs / BigInt{ rhs };
+}
+
+BigInt operator%(const BigInt &lhs, long long int rhs) {
+	return lhs % BigInt{ rhs };
+}
+
+BigInt operator+(long long int lhs, const BigInt &rhs) {
+	return BigInt{ lhs } + rhs;
+}
+
+BigInt operator-(long long int lhs, const BigInt &rhs) {
+	return BigInt{ lhs } - rhs;
+}
+
+BigInt operator*(long long int lhs, const BigInt &rhs) {
+	return BigInt{ lhs } * rhs;
+}
+
+BigInt operator/(long long int lhs, const BigInt &rhs) {
+	return BigInt{ lhs } / rhs;
+}
+
+BigInt operator%(long long int lhs, const BigInt &rhs) {
+	return BigInt{ lhs } % rhs;
+}
