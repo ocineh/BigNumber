@@ -8,7 +8,6 @@ class BigInt {
 public:
 	BigInt() = default;
 	BigInt(const BigInt &other) = default;
-	BigInt &operator=(const BigInt &other) = default;
 	~BigInt() = default;
 
 	explicit BigInt(std::string const &str);
@@ -59,7 +58,10 @@ public:
 	friend BigInt operator<<(BigInt const &lhs, long long unsigned int rhs);
 	friend BigInt operator>>(BigInt const &lhs, long long unsigned int rhs);
 
-	// Arithmetic assignment operators
+	// Assignment operators
+	BigInt &operator=(BigInt const &other) = default;
+	BigInt &operator=(long long n);
+	BigInt &operator=(std::string const &str);
 	BigInt &operator+=(BigInt const &rhs);
 	BigInt &operator-=(BigInt const &rhs);
 	BigInt &operator*=(BigInt const &rhs);

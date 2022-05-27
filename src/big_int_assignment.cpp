@@ -31,3 +31,11 @@ BigInt &BigInt::operator/=(const BigInt &rhs) {
 BigInt &BigInt::operator%=(const BigInt &rhs) {
 	return *this = *this % rhs;
 }
+
+BigInt &BigInt::operator=(long long int n) {
+	return *this = BigInt{ n };
+}
+
+BigInt &BigInt::operator=(const std::string &str) {
+	return *this = BigInt{ str };
+}
