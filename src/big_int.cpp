@@ -32,6 +32,13 @@ std::ostream &operator<<(std::ostream &os, const BigInt &i) {
 	return os;
 }
 
+std::istream &operator>>(std::istream &is, BigInt &i) {
+	std::string str;
+	is >> str;
+	i = BigInt{ str };
+	return is;
+}
+
 void BigInt::strip() {
 	while(!m_digits.empty() && m_digits.front() == 0)
 		m_digits.pop_front();

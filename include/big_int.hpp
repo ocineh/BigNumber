@@ -13,8 +13,6 @@ public:
 	explicit BigInt(std::string const &str);
 	explicit BigInt(long long int n);
 
-	friend std::ostream &operator<<(std::ostream &os, BigInt const &i);
-
 	friend int cmp(BigInt const &a, BigInt const &b);
 	int cmp(BigInt const &b) const;
 	friend int cmp_abs(BigInt const &a, BigInt const &b);
@@ -29,6 +27,9 @@ public:
 	bool is_NaN() const;
 
 	friend std::pair<BigInt, BigInt> division(BigInt const &lhs, BigInt const &rhs);
+
+	friend std::ostream &operator<<(std::ostream &os, BigInt const &i);
+	friend std::istream &operator>>(std::istream &is, BigInt &i);
 
 	// Comparison operators
 	friend bool operator==(BigInt const &lhs, BigInt const &rhs);
