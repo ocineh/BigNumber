@@ -59,7 +59,7 @@ public:
 	friend BigInt operator<<(BigInt const &lhs, long long unsigned int rhs);
 	friend BigInt operator>>(BigInt const &lhs, long long unsigned int rhs);
 
-	// Arithemtic assignment operators
+	// Arithmetic assignment operators
 	BigInt &operator+=(BigInt const &rhs);
 	BigInt &operator-=(BigInt const &rhs);
 	BigInt &operator*=(BigInt const &rhs);
