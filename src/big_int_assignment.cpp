@@ -39,3 +39,23 @@ BigInt &BigInt::operator=(long long int n) {
 BigInt &BigInt::operator=(const std::string &str) {
 	return *this = BigInt{ str };
 }
+
+BigInt &BigInt::operator+=(long long int rhs) {
+	return *this = *this + BigInt{ rhs };
+}
+
+BigInt &BigInt::operator-=(long long int rhs) {
+	return *this = *this - BigInt{ rhs };
+}
+
+BigInt &BigInt::operator*=(long long int rhs) {
+	return *this = *this * BigInt{ rhs };
+}
+
+BigInt &BigInt::operator/=(long long int rhs) {
+	return *this = *this / BigInt{ rhs };
+}
+
+BigInt &BigInt::operator%=(long long int rhs) {
+	return *this = *this % BigInt{ rhs };
+}

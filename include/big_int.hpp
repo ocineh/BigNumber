@@ -97,6 +97,12 @@ public:
 	BigInt &operator<<=(long long unsigned int rhs);
 	BigInt &operator>>=(long long unsigned int rhs);
 
+	BigInt &operator+=(long long rhs);
+	BigInt &operator-=(long long rhs);
+	BigInt &operator*=(long long rhs);
+	BigInt &operator/=(long long rhs);
+	BigInt &operator%=(long long rhs);
+
 private:
 	bool m_negative = false;
 	std::list<unsigned char> m_digits;
