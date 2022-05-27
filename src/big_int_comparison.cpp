@@ -61,3 +61,51 @@ bool operator<=(const BigInt &lhs, const BigInt &rhs) {
 bool operator>=(const BigInt &lhs, const BigInt &rhs) {
 	return cmp(lhs, rhs) >= 0;
 }
+
+bool operator==(const BigInt &lhs, long long int rhs) {
+	return lhs == BigInt{ rhs };
+}
+
+bool operator!=(const BigInt &lhs, long long int rhs) {
+	return lhs != BigInt{ rhs };
+}
+
+bool operator<(const BigInt &lhs, long long int rhs) {
+	return lhs < BigInt{ rhs };
+}
+
+bool operator>(const BigInt &lhs, long long int rhs) {
+	return lhs > BigInt{ rhs };
+}
+
+bool operator<=(const BigInt &lhs, long long int rhs) {
+	return lhs <= BigInt{ rhs };
+}
+
+bool operator>=(const BigInt &lhs, long long int rhs) {
+	return lhs >= BigInt{ rhs };
+}
+
+bool operator==(long long int lhs, const BigInt &rhs) {
+	return BigInt{ lhs } == rhs;
+}
+
+bool operator!=(long long int lhs, const BigInt &rhs) {
+	return BigInt{ lhs } != rhs;
+}
+
+bool operator<(long long int lhs, const BigInt &rhs) {
+	return BigInt{ lhs } < rhs;
+}
+
+bool operator>(long long int lhs, const BigInt &rhs) {
+	return BigInt{ lhs } > rhs;
+}
+
+bool operator<=(long long int lhs, const BigInt &rhs) {
+	return BigInt{ lhs } <= rhs;
+}
+
+bool operator>=(long long int lhs, const BigInt &rhs) {
+	return BigInt{ lhs } >= rhs;
+}

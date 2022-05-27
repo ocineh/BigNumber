@@ -39,6 +39,20 @@ public:
 	friend bool operator<=(BigInt const &lhs, BigInt const &rhs);
 	friend bool operator>=(BigInt const &lhs, BigInt const &rhs);
 
+	friend bool operator==(BigInt const &lhs, long long rhs);
+	friend bool operator!=(BigInt const &lhs, long long rhs);
+	friend bool operator<(BigInt const &lhs, long long rhs);
+	friend bool operator>(BigInt const &lhs, long long rhs);
+	friend bool operator<=(BigInt const &lhs, long long rhs);
+	friend bool operator>=(BigInt const &lhs, long long rhs);
+
+	friend bool operator==(long long lhs, BigInt const &rhs);
+	friend bool operator!=(long long lhs, BigInt const &rhs);
+	friend bool operator<(long long lhs, BigInt const &rhs);
+	friend bool operator>(long long lhs, BigInt const &rhs);
+	friend bool operator<=(long long lhs, BigInt const &rhs);
+	friend bool operator>=(long long lhs, BigInt const &rhs);
+
 	// Unary operators
 	friend BigInt operator-(BigInt const &i);
 
