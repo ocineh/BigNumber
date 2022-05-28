@@ -1,3 +1,4 @@
+#include <iostream>
 #include "big_int_math.hpp"
 
 BigInt pow(BigInt const &base, BigInt const &exp) {
@@ -29,4 +30,27 @@ BigInt pow(long long int base, const BigInt &exp) {
 
 BigInt pow(long long int base, long long int exp) {
 	return pow(BigInt{ base }, BigInt{ exp });
+}
+
+BigInt gcd(const BigInt &a, const BigInt &b) {
+	BigInt a_ = abs(a), b_ = abs(b);
+	if(a_ == 0) return b;
+	if(b_ == 0) return a;
+
+	BigInt x, y, r;
+	a_ < b_ ? (x = a_, y = b_) : (x = b_, y = a_);
+	while(y != 0) r = x % y, x = y, y = r;
+	return x;
+}
+
+BigInt gcd(const BigInt &a, long long int b) {
+	return gcd(a, BigInt{ b });
+}
+
+BigInt gcd(long long int a, const BigInt &b) {
+	return gcd(BigInt{ a }, b);
+}
+
+BigInt gcd(long long int a, long long int b) {
+	return gcd(BigInt{ a }, BigInt{ b });
 }
