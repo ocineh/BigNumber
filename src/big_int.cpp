@@ -70,3 +70,19 @@ bool is_NaN(const BigInt &a) {
 bool BigInt::is_NaN() const {
 	return ::is_NaN(*this);
 }
+
+bool is_even(BigInt const &a) {
+	return !is_NaN(a) && a.m_digits.back() % 2 == 0;
+}
+
+bool BigInt::is_even() const {
+	return ::is_even(*this);
+}
+
+bool is_odd(BigInt const &a) {
+	return !is_NaN(a) && a.m_digits.back() % 2 == 1;
+}
+
+bool BigInt::is_odd() const {
+	return ::is_odd(*this);
+}

@@ -26,6 +26,12 @@ public:
 	friend bool is_NaN(BigInt const &a);
 	bool is_NaN() const;
 
+	friend bool is_even(BigInt const &a);
+	bool is_even() const;
+
+	friend bool is_odd(BigInt const &a);
+	bool is_odd() const;
+
 	friend std::pair<BigInt, BigInt> division(BigInt const &lhs, BigInt const &rhs);
 
 	friend std::ostream &operator<<(std::ostream &os, BigInt const &i);

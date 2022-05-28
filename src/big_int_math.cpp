@@ -12,7 +12,7 @@ BigInt pow(BigInt const &base, BigInt const &exp) {
 	BigInt result{ 1 }, zero{ 0 }, one{ 1 };
 	BigInt base_{ base }, exp_{ exp };
 	while(exp_ > zero) {
-		if(exp_ % 2 == one)
+		if(is_odd(exp_))
 			result *= base_;
 		base_ *= base_;
 		exp_ /= 2;
