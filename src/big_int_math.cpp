@@ -54,3 +54,19 @@ BigInt gcd(long long int a, const BigInt &b) {
 BigInt gcd(long long int a, long long int b) {
 	return gcd(BigInt{ a }, BigInt{ b });
 }
+
+BigInt lcm(const BigInt &a, const BigInt &b) {
+	return abs(a * b) / gcd(a, b);
+}
+
+BigInt lcm(const BigInt &a, long long int b) {
+	return lcm(a, BigInt{ b });
+}
+
+BigInt lcm(long long int a, const BigInt &b) {
+	return lcm(BigInt{ a }, b);
+}
+
+BigInt lcm(long long int a, long long int b) {
+	return lcm(BigInt{ a }, BigInt{ b });
+}

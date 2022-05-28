@@ -13,4 +13,9 @@ BigInt gcd(BigInt const &a, long long b);
 BigInt gcd(long long a, BigInt const &b);
 BigInt gcd(long long a, long long b);
 
+BigInt lcm(BigInt const &a, BigInt const &b);
+BigInt lcm(BigInt const &a, long long b);
+BigInt lcm(long long a, BigInt const &b);
+BigInt lcm(long long a, long long b);
+
 #endif //BIGINT_BIG_INT_MATH_HPP
