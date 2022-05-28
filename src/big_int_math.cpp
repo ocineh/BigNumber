@@ -70,3 +70,13 @@ BigInt lcm(long long int a, const BigInt &b) {
 BigInt lcm(long long int a, long long int b) {
 	return lcm(BigInt{ a }, BigInt{ b });
 }
+
+BigInt factorial(const BigInt &n) {
+	BigInt result{ 1 }, n_ = n + 1;
+	while(n_ > 1) result *= --n_;
+	return result;
+}
+
+BigInt factorial(long long int n) {
+	return factorial(BigInt{ n });
+}

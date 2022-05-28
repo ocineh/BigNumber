@@ -18,4 +18,7 @@ BigInt lcm(BigInt const &a, long long b);
 BigInt lcm(long long a, BigInt const &b);
 BigInt lcm(long long a, long long b);
 
+BigInt factorial(BigInt const &n);
+BigInt factorial(long long n);
+
 #endif //BIGINT_BIG_INT_MATH_HPP
