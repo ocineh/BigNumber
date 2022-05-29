@@ -80,3 +80,19 @@ BigInt factorial(const BigInt &n) {
 BigInt factorial(long long int n) {
 	return factorial(BigInt{ n });
 }
+
+BigInt binomial(const BigInt &n, const BigInt &k) {
+	return factorial(n) / (factorial(k) * factorial(n - k));
+}
+
+BigInt binomial(const BigInt &n, long long int k) {
+	return binomial(n, BigInt{ k });
+}
+
+BigInt binomial(long long int n, const BigInt &k) {
+	return binomial(BigInt{ n }, k);
+}
+
+BigInt binomial(long long int n, long long int k) {
+	return binomial(BigInt{ n }, BigInt{ k });
+}

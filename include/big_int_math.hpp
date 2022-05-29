@@ -21,4 +21,9 @@ BigInt lcm(long long a, long long b);
 BigInt factorial(BigInt const &n);
 BigInt factorial(long long n);
 
+BigInt binomial(BigInt const &n, BigInt const &k);
+BigInt binomial(BigInt const &n, long long k);
+BigInt binomial(long long n, BigInt const &k);
+BigInt binomial(long long n, long long k);
+
 #endif //BIGINT_BIG_INT_MATH_HPP
