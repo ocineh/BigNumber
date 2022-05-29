@@ -32,6 +32,9 @@ public:
 	friend bool is_odd(BigInt const &a);
 	bool is_odd() const;
 
+	friend std::size_t length(BigInt const &a);
+	std::size_t length() const;
+
 	friend std::pair<BigInt, BigInt> division(BigInt const &lhs, BigInt const &rhs);
 
 	friend std::ostream &operator<<(std::ostream &os, BigInt const &i);
@@ -114,6 +117,8 @@ private:
 	std::list<unsigned char> m_digits;
 
 	void strip();
+	void clear();
+
 	BigInt mul_digit(unsigned char digit) const;
 };
 

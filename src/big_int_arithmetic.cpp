@@ -83,7 +83,7 @@ BigInt BigInt::mul_digit(unsigned char digit) const {
 }
 
 BigInt operator*(const BigInt &lhs, const BigInt &rhs) {
-	bool reverse = lhs.m_digits.size() < rhs.m_digits.size();
+	bool reverse = lhs.length() < rhs.length();
 	const BigInt &multiplicand = reverse ? rhs : lhs;
 	const BigInt &multiplier = reverse ? lhs : rhs;
 
@@ -100,7 +100,7 @@ BigInt operator*(const BigInt &lhs, const BigInt &rhs) {
 
 std::pair<BigInt, BigInt> division(const BigInt &a, const BigInt &b) {
 	if(is_zero(a) || is_zero(b)) return { BigInt{ 0 }, BigInt{ 0 }};
-	if(b.m_digits.size() == 1 && b.m_digits.front() == 1) {
+	if(b.length() == 1 && b.m_digits.front() == 1) {
 		BigInt quotient{ a };
 		quotient.m_negative = a.m_negative ^ b.m_negative;
 		return { quotient, BigInt{ 0 }};
@@ -108,8 +108,8 @@ std::pair<BigInt, BigInt> division(const BigInt &a, const BigInt &b) {
 
 	BigInt divisor{ b.abs() }, pas{ divisor }, count{ 1 };
 	BigInt quotient{ 0 }, remainder{ a.abs() };
-	if(pas.m_digits.size() < remainder.m_digits.size()) {
-		long long unsigned len = remainder.m_digits.size() - pas.m_digits.size();
+	if(pas.length() < remainder.length()) {
+		long long unsigned len = remainder.length() - pas.length();
 		pas <<= len;
 		count <<= len;
 	}

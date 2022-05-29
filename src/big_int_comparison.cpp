@@ -4,9 +4,9 @@ int cmp(const BigInt &a, const BigInt &b) {
 	if(a.m_negative != b.m_negative)
 		return a.m_negative ? -1 : 1;
 
-	if(a.m_digits.size() > b.m_digits.size())
+	if(a.length() > b.length())
 		return a.m_negative ? -1 : 1;
-	if(a.m_digits.size() < b.m_digits.size())
+	if(a.length() < b.length())
 		return a.m_negative ? 1 : -1;
 
 	auto i = a.m_digits.begin(), end = a.m_digits.end();
@@ -23,8 +23,8 @@ int BigInt::cmp(const BigInt &b) const {
 }
 
 int cmp_abs(const BigInt &a, const BigInt &b) {
-	if(a.m_digits.size() != b.m_digits.size())
-		return (a.m_digits.size() > b.m_digits.size()) ? 1 : -1;
+	if(a.length() != b.length())
+		return (a.length() > b.length()) ? 1 : -1;
 
 	auto i = a.m_digits.begin(), end = a.m_digits.end();
 	auto j = b.m_digits.begin();

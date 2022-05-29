@@ -11,7 +11,7 @@ BigInt::BigInt(const std::string &str) {
 
 	for(; i < str.size(); ++i) {
 		if(!isdigit(str[i])) {
-			m_digits.clear();
+			this->clear();
 			return;
 		}
 		m_digits.push_back((unsigned char) str[i] - '0');
@@ -56,7 +56,7 @@ BigInt BigInt::abs() const {
 }
 
 bool is_zero(const BigInt &a) {
-	return a.m_digits.size() == 1 && a.m_digits.front() == 0;
+	return a.length() == 1 && a.m_digits.front() == 0;
 }
 
 bool BigInt::is_zero() const {
@@ -85,4 +85,17 @@ bool is_odd(BigInt const &a) {
 
 bool BigInt::is_odd() const {
 	return ::is_odd(*this);
+}
+
+void BigInt::clear() {
+	m_digits.clear();
+	m_negative = false;
+}
+
+std::size_t length(const BigInt &a) {
+	return a.m_digits.size();
+}
+
+std::size_t BigInt::length() const {
+	return ::length(*this);
 }
