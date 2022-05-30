@@ -70,3 +70,13 @@ BigFloat abs(const BigFloat &n) {
 BigFloat BigFloat::abs() const {
 	return ::abs(*this);
 }
+
+std::ostream &operator<<(std::ostream &os, const BigFloat &n) {
+	if(n.m_negative) os << '-';
+	for(unsigned char const &c: n.m_before)
+		os << (char) (c + '0');
+	if(!n.m_after.empty()) os << '.';
+	for(unsigned char const &c: n.m_after)
+		os << (char) (c + '0');
+	return os;
+}
