@@ -62,3 +62,27 @@ int cmp_abs(const BigFloat &a, const BigFloat &b) {
 int BigFloat::cmp_abs(const BigFloat &b) const {
 	return ::cmp_abs(*this, b);
 }
+
+bool operator==(const BigFloat &lhs, const BigFloat &rhs) {
+	return cmp(lhs, rhs) == 0;
+}
+
+bool operator!=(const BigFloat &lhs, const BigFloat &rhs) {
+	return cmp(lhs, rhs) != 0;
+}
+
+bool operator<(const BigFloat &lhs, const BigFloat &rhs) {
+	return cmp(lhs, rhs) < 0;
+}
+
+bool operator<=(const BigFloat &lhs, const BigFloat &rhs) {
+	return cmp(lhs, rhs) <= 0;
+}
+
+bool operator>(const BigFloat &lhs, const BigFloat &rhs) {
+	return cmp(lhs, rhs) > 0;
+}
+
+bool operator>=(const BigFloat &lhs, const BigFloat &rhs) {
+	return cmp(lhs, rhs) >= 0;
+}
