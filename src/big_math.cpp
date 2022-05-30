@@ -1,5 +1,5 @@
 #include <iostream>
-#include "big_int_math.hpp"
+#include "big_math.hpp"
 
 BigInt pow(BigInt const &base, BigInt const &exp) {
 	if(exp <= 0) {
