@@ -66,8 +66,8 @@ public:
 	BigFloat &operator=(long double n);
 	BigFloat &operator+=(BigFloat const &other);
 	BigFloat &operator-=(BigFloat const &other);
-	BigFloat &operator<<=(BigFloat const &other);
-	BigFloat &operator>>=(BigFloat const &other);
+	BigFloat &operator<<=(std::size_t shift);
+	BigFloat &operator>>=(std::size_t shift);
 
 private:
 	bool m_negative;
