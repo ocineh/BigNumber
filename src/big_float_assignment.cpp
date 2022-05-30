@@ -26,9 +26,9 @@ BigFloat &BigFloat::operator>>=(std::size_t shift) {
 }
 
 BigFloat &BigFloat::operator=(std::string const &str) {
-	*this = BigFloat{ str };
+	return *this = BigFloat{ str };
 }
 
 BigFloat &BigFloat::operator=(long double n) {
-	*this = BigFloat{ n };
+	return *this = BigFloat{ n };
 }
