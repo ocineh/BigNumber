@@ -44,7 +44,7 @@ BigFloat::BigFloat(const std::string &str) {
 		++it;
 		while(it != end) {
 			if(isdigit(*it))
-				m_after.push_back((unsigned char) (*(it++)  - '0'));
+				m_after.push_back((unsigned char) (*(it++) - '0'));
 			else {
 				clear();
 				return;
@@ -59,4 +59,14 @@ BigFloat::BigFloat(long double n) {
 	std::stringstream ss;
 	ss << std::fixed << std::setprecision(std::numeric_limits<long double>::digits) << n;
 	*this = BigFloat(ss.str());
+}
+
+BigFloat abs(const BigFloat &n) {
+	BigFloat ret{ n };
+	ret.m_negative = false;
+	return ret;
+}
+
+BigFloat BigFloat::abs() const {
+	return ::abs(*this);
 }
