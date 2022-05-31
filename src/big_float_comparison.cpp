@@ -15,18 +15,14 @@ int cmp(const BigFloat &a, const BigFloat &b) {
 		}
 	}
 
-	if(a.m_after.size() > b.m_after.size()) return a.m_negative ? -1 : 1;
-	if(a.m_after.size() < b.m_after.size()) return a.m_negative ? 1 : -1;
-	else {
-		auto i = a.m_after.begin(), i_end = a.m_after.end();
-		auto j = b.m_after.begin(), j_end = b.m_after.end();
-		for(; i != i_end && j != j_end; ++i, ++j) {
-			if(*i > *j) return a.m_negative ? -1 : 1;
-			if(*i < *j) return a.m_negative ? 1 : -1;
-		}
-		if(i != i_end) return a.m_negative ? -1 : 1;
-		if(j != j_end) return a.m_negative ? 1 : -1;
+	auto i = a.m_after.begin(), i_end = a.m_after.end();
+	auto j = b.m_after.begin(), j_end = b.m_after.end();
+	for(; i != i_end && j != j_end; ++i, ++j) {
+		if(*i > *j) return a.m_negative ? -1 : 1;
+		if(*i < *j) return a.m_negative ? 1 : -1;
 	}
+	if(i != i_end) return a.m_negative ? -1 : 1;
+	if(j != j_end) return a.m_negative ? 1 : -1;
 	return 0;
 }
 
@@ -42,20 +38,16 @@ int cmp_abs(const BigFloat &a, const BigFloat &b) {
 		auto j = b.m_before.begin();
 		for(; i != end; ++i, ++j)
 			if(*i != *j)
-				return (*i > *j) ? 1: -1;
+				return (*i > *j) ? 1 : -1;
 	}
 
-	if(a.m_after.size() > b.m_after.size()) return -1;
-	if(a.m_after.size() < b.m_after.size()) return 1;
-	else {
-		auto i = a.m_after.begin(), i_end = a.m_after.end();
-		auto j = b.m_after.begin(), j_end = b.m_after.end();
-		for(; i != i_end && j != j_end; ++i, ++j)
-			if(*i != *j)
-				return (*i > *j) ? -1: 1;
-		if(i != i_end) return -1;
-		if(j != j_end) return 1;
-	}
+	auto i = a.m_after.begin(), i_end = a.m_after.end();
+	auto j = b.m_after.begin(), j_end = b.m_after.end();
+	for(; i != i_end && j != j_end; ++i, ++j)
+		if(*i != *j)
+			return (*i > *j) ? 1 : -1;
+	if(i != i_end) return -1;
+	if(j != j_end) return 1;
 	return 0;
 }
 
