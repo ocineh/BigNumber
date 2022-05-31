@@ -32,6 +32,8 @@ public:
 	friend std::size_t length(BigFloat const &n);
 	std::size_t length() const;
 
+	std::string to_string() const;
+
 	// I/O stream operators
 	friend std::ostream &operator<<(std::ostream &os, const BigFloat &n);
 

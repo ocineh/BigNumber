@@ -97,3 +97,9 @@ std::size_t length(BigFloat const &n) {
 std::size_t BigFloat::length() const {
 	return ::length(*this);
 }
+
+std::string BigFloat::to_string() const {
+	std::stringstream ss;
+	ss << *this;
+	return ss.str();
+}
