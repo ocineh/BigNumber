@@ -2,7 +2,7 @@
 #define BIGINT_BIG_FLOAT_HPP
 
 #include <list>
-#include <string>
+#include <ostream>
 
 class BigFloat {
 public:
@@ -55,8 +55,8 @@ public:
 	friend BigFloat operator--(BigFloat &n, int);
 
 	// Arithmetic operators
-	friend BigFloat operator+(BigFloat const &n1, BigFloat const &n2);
-	friend BigFloat operator-(BigFloat const &n1, BigFloat const &n2);
+	friend BigFloat operator+(BigFloat const &lhs, BigFloat const &rhs);
+	friend BigFloat operator-(BigFloat const &lhs, BigFloat const &rhs);
 	friend BigFloat operator<<(BigFloat const &n, std::size_t shift);
 	friend BigFloat operator>>(BigFloat const &n, std::size_t shift);
 
