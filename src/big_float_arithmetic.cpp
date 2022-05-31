@@ -98,3 +98,54 @@ BigFloat operator+(BigFloat const &lhs, BigFloat const &rhs) {
 BigFloat operator-(BigFloat const &n1, BigFloat const &n2) {
 	return n1 + -n2;
 }
+
+BigFloat BigFloat::mul_digit(unsigned char digit) const {
+	if(digit == 0) return BigFloat{ 0 };
+	if(digit == 1) return this->abs();
+
+	BigFloat result{};
+	std::list<unsigned char>::const_reverse_iterator i, end;
+	i = m_after.rbegin(), end = m_after.rend();
+	int carry = 0, mul;
+	for(; i != end; ++i) {
+		mul = *i * digit + carry;
+		carry = mul / 10;
+		result.m_after.push_front(mul % 10);
+	}
+
+	i = m_before.rbegin(), end = m_before.rend();
+	for(; i != end; ++i) {
+		mul = *i * digit + carry;
+		carry = mul / 10;
+		result.m_before.push_front(mul % 10);
+	}
+
+	if(carry != 0) result.m_before.push_front(carry);
+	return result;
+}
+
+BigFloat operator*(BigFloat const &lhs, BigFloat const &rhs) {
+	if(is_NaN(lhs) || is_NaN(rhs)) return {}; // NaN * anything = NaN
+	BigFloat result{ 0 };
+	if(is_zero(lhs) || is_zero(rhs)) return result;
+
+	BigFloat const *multiplicand, *multiplier;
+	if(lhs.length() > rhs.length()) multiplicand = &lhs, multiplier = &rhs;
+	else multiplicand = &rhs, multiplier = &lhs;
+
+	std::list<unsigned char>::const_reverse_iterator i, end;
+	std::size_t rand = multiplier->m_after.size();
+	i = std::rbegin(multiplier->m_after), end = std::rend(multiplier->m_after);
+	for(; i != end; ++i, --rand)
+		if(*i != 0)
+			result += multiplicand->mul_digit(*i) >>= rand;
+
+	i = std::rbegin(multiplier->m_before), end = std::rend(multiplier->m_before);
+	rand = 0;
+	for(; i != end; ++i, ++rand)
+		if(*i != 0)
+			result += multiplicand->mul_digit(*i) <<= rand;
+
+	result.m_negative = lhs.m_negative ^ rhs.m_negative;
+	return result;
+}

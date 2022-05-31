@@ -57,6 +57,7 @@ public:
 	// Arithmetic operators
 	friend BigFloat operator+(BigFloat const &lhs, BigFloat const &rhs);
 	friend BigFloat operator-(BigFloat const &lhs, BigFloat const &rhs);
+	friend BigFloat operator*(BigFloat const &lhs, BigFloat const &rhs);
 	friend BigFloat operator<<(BigFloat const &n, std::size_t shift);
 	friend BigFloat operator>>(BigFloat const &n, std::size_t shift);
 
@@ -66,6 +67,7 @@ public:
 	BigFloat &operator=(long double n);
 	BigFloat &operator+=(BigFloat const &other);
 	BigFloat &operator-=(BigFloat const &other);
+	BigFloat &operator*=(BigFloat const &other);
 	BigFloat &operator<<=(std::size_t shift);
 	BigFloat &operator>>=(std::size_t shift);
 
@@ -76,6 +78,8 @@ private:
 
 	void strip();
 	void clear();
+
+	BigFloat mul_digit(unsigned char digit) const;
 };
 
 

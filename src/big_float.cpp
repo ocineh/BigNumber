@@ -72,6 +72,7 @@ BigFloat BigFloat::abs() const {
 }
 
 std::ostream &operator<<(std::ostream &os, const BigFloat &n) {
+	if(is_NaN(n)) return os << "NaN";
 	if(n.m_negative) os << '-';
 	for(unsigned char const &c: n.m_before)
 		os << (char) (c + '0');
