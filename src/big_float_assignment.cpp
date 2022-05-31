@@ -32,3 +32,11 @@ BigFloat &BigFloat::operator=(std::string const &str) {
 BigFloat &BigFloat::operator=(long double n) {
 	return *this = BigFloat{ n };
 }
+
+BigFloat &BigFloat::operator+=(BigFloat const &other) {
+	return *this = *this + other;
+}
+
+BigFloat &BigFloat::operator-=(BigFloat const &other) {
+	return *this = *this - other;
+}
