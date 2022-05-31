@@ -13,9 +13,6 @@ public:
 	explicit BigFloat(std::string const &str);
 	explicit BigFloat(long double n);
 
-	friend bool is_NaN(BigFloat const &n);
-	bool is_NaN() const;
-
 	// Comparison functions
 	friend int cmp(BigFloat const &a, BigFloat const &b);
 	int cmp(BigFloat const &b) const;
@@ -23,6 +20,9 @@ public:
 	int cmp_abs(BigFloat const &b) const;
 
 	// Utility functions
+	friend bool is_NaN(BigFloat const &n);
+	bool is_NaN() const;
+
 	friend BigFloat abs(BigFloat const &n);
 	BigFloat abs() const;
 

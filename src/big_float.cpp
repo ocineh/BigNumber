@@ -80,3 +80,11 @@ std::ostream &operator<<(std::ostream &os, const BigFloat &n) {
 		os << (char) (c + '0');
 	return os;
 }
+
+bool is_NaN(const BigFloat &n) {
+	return n.m_before.empty();
+}
+
+bool BigFloat::is_NaN() const {
+	return ::is_NaN(*this);
+}

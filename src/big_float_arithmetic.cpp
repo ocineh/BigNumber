@@ -10,6 +10,7 @@ BigFloat operator>>(BigFloat const &n, std::size_t shift) {
 
 BigFloat operator+(BigFloat const &lhs, BigFloat const &rhs) {
 	BigFloat result;
+	if(is_NaN(lhs) || is_NaN(rhs)) return result;
 
 	// Determine the sign of the result
 	int cmp = cmp_abs(lhs, rhs);
