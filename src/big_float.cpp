@@ -88,3 +88,11 @@ bool is_NaN(const BigFloat &n) {
 bool BigFloat::is_NaN() const {
 	return ::is_NaN(*this);
 }
+
+std::size_t length(BigFloat const &n) {
+	return n.m_before.size() + n.m_after.size();
+}
+
+std::size_t BigFloat::length() const {
+	return ::length(*this);
+}
