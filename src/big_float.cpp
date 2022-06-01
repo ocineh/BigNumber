@@ -1,6 +1,7 @@
 #include <sstream>
 #include <iomanip>
 #include <limits>
+#include <iostream>
 #include "big_float.hpp"
 
 void BigFloat::clear() {
@@ -25,26 +26,37 @@ bool BigFloat::is_zero() const {
 	return ::is_zero(*this);
 }
 
-BigFloat::BigFloat(const std::string &str) {
+static unsigned char ctou(char c) {
+	if(c >= '0' && c <= '9') return (unsigned char) (c - '0');
+	if(c >= 'a' && c <= 'z') return (unsigned char) (c - 'a' + 10);
+	if(c >= 'A' && c <= 'Z') return (unsigned char) (c - 'A' + 10);
+	return 0;
+}
+
+BigFloat::BigFloat(
+		std::string const &str,
+		char decimal_separator,
+		char thousands_separator,
+		std::function<bool(char)> const &is_digit
+) {
 	auto it = str.begin(), end = str.end();
 	if(*it == '-') m_negative = true, ++it;
 	else if(*it == '+') m_negative = false, ++it;
-	else if(isdigit(*it)) m_negative = false;
+	else if(is_digit(*it)) m_negative = false;
 
-	while(it != end && *it != '.') {
-		if(isdigit(*it))
-			m_before.push_back((unsigned char) (*(it++) - '0'));
-		else {
+	for(; it != end && *it != decimal_separator; ++it) {
+		if(is_digit(*it)) m_before.push_back(ctou(*it));
+		else if(*it != thousands_separator) {
 			clear();
 			return;
 		}
 	}
 
 	if(it != end) {
-		++it;
-		while(it != end) {
+		for(++it; it != end; ++it) {
+			if(*it == thousands_separator) continue;
 			if(isdigit(*it))
-				m_after.push_back((unsigned char) (*(it++) - '0'));
+				m_after.push_back((unsigned char) (*it - '0'));
 			else {
 				clear();
 				return;
@@ -55,10 +67,18 @@ BigFloat::BigFloat(const std::string &str) {
 	if(is_zero()) m_negative = false;
 }
 
+BigFloat::BigFloat(const std::string &str, const std::locale &locale) : BigFloat{
+		str,
+		std::use_facet<std::numpunct<char>>(locale).decimal_point(),
+		std::use_facet<std::numpunct<char>>(locale).thousands_sep(),
+		[locale](char c) { return std::isdigit(c, locale); },
+} {}
+
 BigFloat::BigFloat(long double n) {
-	std::stringstream ss;
-	ss << std::fixed << std::setprecision(std::numeric_limits<long double>::digits) << n;
-	*this = BigFloat(ss.str());
+	m_negative = n < 0;
+	std::ostringstream os;
+	os << std::fixed << std::setprecision(std::numeric_limits<long double>::digits) << n;
+	*this = BigFloat{ os.str(), os.getloc() };
 }
 
 BigFloat abs(const BigFloat &n) {
@@ -76,7 +96,8 @@ std::ostream &operator<<(std::ostream &os, const BigFloat &n) {
 	if(n.m_negative) os << '-';
 	for(unsigned char const &c: n.m_before)
 		os << (char) (c + '0');
-	if(!n.m_after.empty()) os << '.';
+	if(!n.m_after.empty())
+		os << std::use_facet<std::numpunct<char>>(os.getloc()).decimal_point();
 	for(unsigned char const &c: n.m_after)
 		os << (char) (c + '0');
 	return os;

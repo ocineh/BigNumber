@@ -3,6 +3,7 @@
 
 #include <list>
 #include <ostream>
+#include <functional>
 
 class BigFloat {
 public:
@@ -10,7 +11,13 @@ public:
 	BigFloat(const BigFloat &) = default;
 	~BigFloat() = default;
 
-	explicit BigFloat(std::string const &str);
+	explicit BigFloat(
+			std::string const &str,
+			char decimal_separator = '.',
+			char thousands_separator = '\0',
+			std::function<bool(char)> const &is_digit = isdigit
+	);
+	BigFloat(std::string const &str, std::locale const &locale);
 	explicit BigFloat(long double n);
 
 	// Comparison functions
@@ -33,6 +40,9 @@ public:
 	std::size_t length() const;
 
 	std::string to_string() const;
+
+	static char get_decimal_point();
+	static char get_thousands_sep();
 
 	// I/O stream operators
 	friend std::ostream &operator<<(std::ostream &os, const BigFloat &n);
