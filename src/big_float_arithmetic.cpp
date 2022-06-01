@@ -159,14 +159,19 @@ BigFloat operator/(BigFloat const &lhs, BigFloat const &rhs) {
 
 	BigFloat quotient{ 0 }, remainder = lhs.abs();
 	BigFloat count{ "1" }, pas = rhs.abs();
+	if(pas.m_before.size() < remainder.m_before.size()) {
+		std::size_t len = remainder.m_before.size() - pas.m_before.size();
+		pas <<= len;
+		count <<= len;
+	}
 
-	while(!remainder.is_zero() && quotient.m_after.size() <= 10) {
+	while(!remainder.is_zero() && quotient.m_after.size() <= 1000) {
 		while(remainder < pas) pas >>= 1, count >>= 1;
 		remainder -= pas;
 		quotient += count;
 	}
 
-	if(quotient.m_after.size() > 10) {
+	if(quotient.m_after.size() > 1000) {
 		quotient.m_after.pop_back();
 		unsigned char n = quotient.m_after.back();
 		quotient.m_after.pop_back();
