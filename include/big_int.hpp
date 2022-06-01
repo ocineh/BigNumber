@@ -1,6 +1,7 @@
 #ifndef BIGINT_BIG_INT_HPP
 #define BIGINT_BIG_INT_HPP
 
+#include <functional>
 #include <ostream>
 #include <list>
 

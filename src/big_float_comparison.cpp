@@ -78,3 +78,51 @@ bool operator>(const BigFloat &lhs, const BigFloat &rhs) {
 bool operator>=(const BigFloat &lhs, const BigFloat &rhs) {
 	return cmp(lhs, rhs) >= 0;
 }
+
+bool operator==(const BigFloat &lhs, long double rhs) {
+	return lhs == BigFloat{ rhs };
+}
+
+bool operator!=(const BigFloat &lhs, long double rhs) {
+	return lhs != BigFloat{ rhs };
+}
+
+bool operator<(const BigFloat &lhs, long double rhs) {
+	return lhs < BigFloat{ rhs };
+}
+
+bool operator<=(const BigFloat &lhs, long double rhs) {
+	return lhs <= BigFloat{ rhs };
+}
+
+bool operator>(const BigFloat &lhs, long double rhs) {
+	return lhs > BigFloat{ rhs };
+}
+
+bool operator>=(const BigFloat &lhs, long double rhs) {
+	return lhs >= BigFloat{ rhs };
+}
+
+bool operator==(long double lhs, const BigFloat &rhs) {
+	return BigFloat{ lhs } == rhs;
+}
+
+bool operator!=(long double lhs, const BigFloat &rhs) {
+	return BigFloat{ lhs } != rhs;
+}
+
+bool operator<(long double lhs, const BigFloat &rhs) {
+	return BigFloat{ lhs } < rhs;
+}
+
+bool operator<=(long double lhs, const BigFloat &rhs) {
+	return BigFloat{ lhs } <= rhs;
+}
+
+bool operator>(long double lhs, const BigFloat &rhs) {
+	return BigFloat{ lhs } > rhs;
+}
+
+bool operator>=(long double lhs, const BigFloat &rhs) {
+	return BigFloat{ lhs } >= rhs;
+}

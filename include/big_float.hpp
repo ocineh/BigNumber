@@ -55,6 +55,20 @@ public:
 	friend bool operator<=(const BigFloat &lhs, const BigFloat &rhs);
 	friend bool operator>=(const BigFloat &lhs, const BigFloat &rhs);
 
+	friend bool operator==(const BigFloat &lhs, long double rhs);
+	friend bool operator!=(const BigFloat &lhs, long double rhs);
+	friend bool operator<(const BigFloat &lhs, long double rhs);
+	friend bool operator>(const BigFloat &lhs, long double rhs);
+	friend bool operator<=(const BigFloat &lhs, long double rhs);
+	friend bool operator>=(const BigFloat &lhs, long double rhs);
+
+	friend bool operator==(long double lhs, const BigFloat &rhs);
+	friend bool operator!=(long double lhs, const BigFloat &rhs);
+	friend bool operator<(long double lhs, const BigFloat &rhs);
+	friend bool operator>(long double lhs, const BigFloat &rhs);
+	friend bool operator<=(long double lhs, const BigFloat &rhs);
+	friend bool operator>=(long double lhs, const BigFloat &rhs);
+
 	// Unary operators
 	friend BigFloat operator-(const BigFloat &n);
 
