@@ -1,3 +1,4 @@
+#include <iostream>
 #include "big_float.hpp"
 
 BigFloat operator<<(BigFloat const &n, std::size_t shift) {
@@ -174,4 +175,20 @@ BigFloat operator/(BigFloat const &lhs, BigFloat const &rhs) {
 	}
 	quotient.m_negative = lhs.m_negative ^ rhs.m_negative;
 	return quotient;
+}
+
+BigFloat operator%(BigFloat const &lhs, BigFloat const &rhs) {
+	if(is_NaN(lhs) || is_NaN(rhs) || is_zero(rhs)) return {};
+	if(is_zero(lhs)) return BigFloat{ 0 };
+
+	BigFloat remainder = lhs.abs(), pas = rhs.abs();
+	if(pas.m_before.size() < remainder.m_before.size())
+		pas <<= remainder.m_before.size() - pas.m_before.size();
+
+	while(cmp_abs(remainder, rhs) >= 0) {
+		while(remainder < pas) pas >>= 1;
+		remainder -= pas;
+	}
+	remainder.m_negative = lhs.m_negative;
+	return remainder;
 }
