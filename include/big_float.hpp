@@ -89,6 +89,18 @@ public:
 	friend BigFloat operator<<(BigFloat const &n, std::size_t shift);
 	friend BigFloat operator>>(BigFloat const &n, std::size_t shift);
 
+	friend BigFloat operator+(BigFloat const &lhs, long double rhs);
+	friend BigFloat operator-(BigFloat const &lhs, long double rhs);
+	friend BigFloat operator*(BigFloat const &lhs, long double rhs);
+	friend BigFloat operator/(BigFloat const &lhs, long double rhs);
+	friend BigFloat operator%(BigFloat const &lhs, long double rhs);
+
+	friend BigFloat operator+(long double lhs, BigFloat const &rhs);
+	friend BigFloat operator-(long double lhs, BigFloat const &rhs);
+	friend BigFloat operator*(long double lhs, BigFloat const &rhs);
+	friend BigFloat operator/(long double lhs, BigFloat const &rhs);
+	friend BigFloat operator%(long double lhs, BigFloat const &rhs);
+
 	// Assignment operators
 	BigFloat &operator=(const BigFloat &other) = default;
 	BigFloat &operator=(std::string const &str);

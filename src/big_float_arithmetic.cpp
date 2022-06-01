@@ -197,3 +197,43 @@ BigFloat operator%(BigFloat const &lhs, BigFloat const &rhs) {
 	remainder.m_negative = lhs.m_negative;
 	return remainder;
 }
+
+BigFloat operator+(BigFloat const &lhs, long double rhs) {
+	return lhs + BigFloat{ rhs };
+}
+
+BigFloat operator-(BigFloat const &lhs, long double rhs) {
+	return lhs - BigFloat{ rhs };
+}
+
+BigFloat operator*(BigFloat const &lhs, long double rhs) {
+	return lhs * BigFloat{ rhs };
+}
+
+BigFloat operator/(BigFloat const &lhs, long double rhs) {
+	return lhs / BigFloat{ rhs };
+}
+
+BigFloat operator%(BigFloat const &lhs, long double rhs) {
+	return lhs % BigFloat{ rhs };
+}
+
+BigFloat operator+(long double lhs, BigFloat const &rhs) {
+	return BigFloat{ lhs } + rhs;
+}
+
+BigFloat operator-(long double lhs, BigFloat const &rhs) {
+	return BigFloat{ lhs } - rhs;
+}
+
+BigFloat operator*(long double lhs, BigFloat const &rhs) {
+	return BigFloat{ lhs } * rhs;
+}
+
+BigFloat operator/(long double lhs, BigFloat const &rhs) {
+	return BigFloat{ lhs } / rhs;
+}
+
+BigFloat operator%(long double lhs, BigFloat const &rhs) {
+	return BigFloat{ lhs } % rhs;
+}
