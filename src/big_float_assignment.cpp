@@ -48,3 +48,27 @@ BigFloat &BigFloat::operator*=(BigFloat const &other) {
 BigFloat &BigFloat::operator/=(BigFloat const &other) {
 	return *this = *this / other;
 }
+
+BigFloat &BigFloat::operator%=(BigFloat const &other) {
+	return *this = *this % other;
+}
+
+BigFloat &BigFloat::operator+=(long double n) {
+	return *this = *this + n;
+}
+
+BigFloat &BigFloat::operator-=(long double n) {
+	return *this = *this - n;
+}
+
+BigFloat &BigFloat::operator*=(long double n) {
+	return *this = *this * n;
+}
+
+BigFloat &BigFloat::operator/=(long double n) {
+	return *this = *this / n;
+}
+
+BigFloat &BigFloat::operator%=(long double n) {
+	return *this = *this % n;
+}

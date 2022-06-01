@@ -109,8 +109,15 @@ public:
 	BigFloat &operator-=(BigFloat const &other);
 	BigFloat &operator*=(BigFloat const &other);
 	BigFloat &operator/=(BigFloat const &other);
+	BigFloat &operator%=(BigFloat const &other);
 	BigFloat &operator<<=(std::size_t shift);
 	BigFloat &operator>>=(std::size_t shift);
+
+	BigFloat &operator+=(long double n);
+	BigFloat &operator-=(long double n);
+	BigFloat &operator*=(long double n);
+	BigFloat &operator/=(long double n);
+	BigFloat &operator%=(long double n);
 
 private:
 	bool m_negative;
