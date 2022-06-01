@@ -1,28 +1,46 @@
 #include <sstream>
+#include <functional>
 #include "big_int.hpp"
 
-BigInt::BigInt(const std::string &str) {
-	if(str.empty()) return;
-	size_t i = 0;
-	if(str[i] == '-') m_negative = true, ++i;
-	else if(str[i] == '+' || isdigit(str[i]))
-		m_negative = false, str[i] == '-' ? ++i : 0;
-	else return;
+static unsigned char ctou(char c) {
+	if(c >= '0' && c <= '9') return (unsigned char) (c - '0');
+	if(c >= 'a' && c <= 'z') return (unsigned char) (c - 'a' + 10);
+	if(c >= 'A' && c <= 'Z') return (unsigned char) (c - 'A' + 10);
+	return 0;
+}
 
-	for(; i < str.size(); ++i) {
-		if(!isdigit(str[i])) {
+BigInt::BigInt(
+		const std::string &str,
+		char thousands_separator,
+		std::function<bool(char)> const &is_digit
+) {
+	if(str.empty()) return;
+	auto it = str.begin(), end = str.end();
+	if(*it == '-') m_negative = true, ++it;
+	else if(*it == '+') m_negative = false, ++it;
+	else if(is_digit(*it)) m_negative = false;
+
+	for(; it != end; ++it) {
+		if(*it == thousands_separator) continue;
+		if(!is_digit(*it)) {
 			this->clear();
 			return;
 		}
-		m_digits.push_back((unsigned char) str[i] - '0');
+		m_digits.push_back(ctou(*it));
 	}
 	if(m_digits.size() == 1 && m_digits.front() == 0) m_negative = false;
 }
 
+BigInt::BigInt(std::string const &str, std::locale const &locale) : BigInt(
+		str,
+		std::use_facet<std::numpunct<char>>(locale).thousands_sep(),
+		[locale](char c) { return std::isdigit(c, locale); }
+) {}
+
 BigInt::BigInt(long long int n) {
 	std::stringstream ss;
 	ss << n;
-	*this = BigInt(ss.str());
+	*this = BigInt(ss.str(), ss.getloc());
 }
 
 std::ostream &operator<<(std::ostream &os, const BigInt &i) {

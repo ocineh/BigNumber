@@ -10,7 +10,12 @@ public:
 	BigInt(const BigInt &other) = default;
 	~BigInt() = default;
 
-	explicit BigInt(std::string const &str);
+	explicit BigInt(
+			std::string const &str,
+			char thousands_separator = '\0',
+			std::function<bool(char)> const &is_digit = isdigit
+	);
+	BigInt(std::string const &str, std::locale const &locale);
 	explicit BigInt(long long int n);
 
 	friend int cmp(BigInt const &a, BigInt const &b);
