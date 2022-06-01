@@ -149,3 +149,29 @@ BigFloat operator*(BigFloat const &lhs, BigFloat const &rhs) {
 	result.m_negative = lhs.m_negative ^ rhs.m_negative;
 	return result;
 }
+
+BigFloat operator/(BigFloat const &lhs, BigFloat const &rhs) {
+	if(is_NaN(lhs) || is_NaN(rhs) || is_zero(rhs)) return {};
+	if(is_zero(lhs)) return BigFloat{ 0 };
+	if(rhs == BigFloat{ 1 }) return BigFloat{ lhs };
+	if(rhs == BigFloat{ -1 }) return -lhs;
+
+	BigFloat quotient{ 0 }, remainder = lhs.abs();
+	BigFloat count{ "1" }, pas = rhs.abs();
+
+	while(!remainder.is_zero() && quotient.m_after.size() <= 10) {
+		while(remainder < pas) pas >>= 1, count >>= 1;
+		remainder -= pas;
+		quotient += count;
+	}
+
+	if(quotient.m_after.size() > 10) {
+		quotient.m_after.pop_back();
+		unsigned char n = quotient.m_after.back();
+		quotient.m_after.pop_back();
+		unsigned char m = quotient.m_after.back();
+		quotient.m_after.push_back(m + (n > 5 ? 1 : 0));
+	}
+	quotient.m_negative = lhs.m_negative ^ rhs.m_negative;
+	return quotient;
+}

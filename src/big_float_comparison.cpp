@@ -46,8 +46,8 @@ int cmp_abs(const BigFloat &a, const BigFloat &b) {
 	for(; i != i_end && j != j_end; ++i, ++j)
 		if(*i != *j)
 			return (*i > *j) ? 1 : -1;
-	if(i != i_end) return -1;
-	if(j != j_end) return 1;
+	if(i != i_end) return 1;
+	if(j != j_end) return -1;
 	return 0;
 }
 
