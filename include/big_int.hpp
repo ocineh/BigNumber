@@ -33,6 +33,7 @@ public:
 	[[nodiscard]] bool is_even() const;
 	[[nodiscard]] bool is_odd() const;
 	[[nodiscard]] std::size_t length() const;
+	[[nodiscard]] std::string to_string(std::locale const &locale = std::locale()) const;
 
 	friend std::pair<BigInt, BigInt> division(BigInt const &lhs, BigInt const &rhs);
 

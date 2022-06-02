@@ -1,5 +1,6 @@
 #include <sstream>
 #include <functional>
+#include <iostream>
 #include "big_int.hpp"
 
 static unsigned char ctou(char c) {
@@ -10,9 +11,7 @@ static unsigned char ctou(char c) {
 }
 
 BigInt::BigInt(
-		const std::string &str,
-		char thousands_separator,
-		std::function<bool(char)> const &is_digit
+		const std::string &str, char thousands_separator, std::function<bool(char)> const &is_digit
 ) {
 	if(str.empty()) return;
 	auto it = str.begin(), end = str.end();
@@ -44,9 +43,24 @@ BigInt::BigInt(long long int n) {
 }
 
 std::ostream &operator<<(std::ostream &os, const BigInt &i) {
+	if(i.is_NaN()) return os << "NaN";
+	if(i.is_zero()) return os << "0";
+
 	if(i.m_negative) os << '-';
-	for(unsigned char c: i.m_digits)
-		os << (char) (c + '0');
+	auto it = i.m_digits.begin(), end = i.m_digits.end();
+	for(std::size_t j = i.m_digits.size() % 3; j > 0; --j, ++it)
+		os << (char) (*it + '0');
+	if(it == end) return os;
+
+	char thousands_separator = std::use_facet<std::numpunct<char>>(os.getloc()).thousands_sep();
+	if(it != i.m_digits.begin() && it != end && thousands_separator != '\0')
+		os << thousands_separator;
+
+	for(int j = 0; it != end; ++j, ++it) {
+		if(j == 3 && thousands_separator != '\0')
+			os << thousands_separator, j = 0;
+		os << (char) (*it + '0');
+	}
 	return os;
 }
 
@@ -92,4 +106,11 @@ void BigInt::clear() {
 
 std::size_t BigInt::length() const {
 	return m_digits.size();
+}
+
+std::string BigInt::to_string(std::locale const &locale) const {
+	std::ostringstream ss;
+	ss.imbue(locale);
+	ss << *this;
+	return ss.str();
 }
