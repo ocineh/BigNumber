@@ -5,14 +5,14 @@ BigInt pow(BigInt const &base, BigInt const &exp) {
 	if(exp <= 0) {
 		if(exp == 0) return BigInt{ base == 0 ? 0 : 1 };
 		if(base == 0) return BigInt{ 0 };
-		return abs(base) == 1 ? BigInt{ base } : BigInt{ 0 };
+		return base.abs() == 1 ? BigInt{ base } : BigInt{ 0 };
 	}
 	if(base == 0) return BigInt{ 0 };
 
 	BigInt result{ 1 }, zero{ 0 }, one{ 1 };
 	BigInt base_{ base }, exp_{ exp };
 	while(exp_ > zero) {
-		if(is_odd(exp_))
+		if(exp_.is_odd())
 			result *= base_;
 		base_ *= base_;
 		exp_ /= 2;
@@ -33,7 +33,7 @@ BigInt pow(long long int base, long long int exp) {
 }
 
 BigInt gcd(const BigInt &a, const BigInt &b) {
-	BigInt a_ = abs(a), b_ = abs(b);
+	BigInt a_ = a.abs(), b_ = b.abs();
 	if(a_ == 0) return b;
 	if(b_ == 0) return a;
 
@@ -56,7 +56,7 @@ BigInt gcd(long long int a, long long int b) {
 }
 
 BigInt lcm(const BigInt &a, const BigInt &b) {
-	return abs(a * b) / gcd(a, b);
+	return (a * b).abs() / gcd(a, b);
 }
 
 BigInt lcm(const BigInt &a, long long int b) {

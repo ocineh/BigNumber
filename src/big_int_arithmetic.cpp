@@ -4,12 +4,12 @@ BigInt operator+(const BigInt &lhs, const BigInt &rhs) {
 	BigInt result;
 
 	// Determine the sign of the result
-	int cmp = cmp_abs(lhs, rhs);
+	ordering cmp = BigInt::cmp_abs(lhs, rhs);
 	bool same_sign = lhs.m_negative == rhs.m_negative;
 	if(same_sign) result.m_negative = lhs.m_negative;
 	else {
-		if(cmp == -1) result.m_negative = rhs.m_negative;
-		else if(cmp == 1) result.m_negative = lhs.m_negative;
+		if(cmp == ordering::less) result.m_negative = rhs.m_negative;
+		else if(cmp == ordering::greater) result.m_negative = lhs.m_negative;
 		else { // x + -x = 0
 			result.m_negative = false;
 			result.m_digits.push_front(0);
@@ -19,7 +19,7 @@ BigInt operator+(const BigInt &lhs, const BigInt &rhs) {
 
 	// Calculate the result
 	std::list<unsigned char>::const_reverse_iterator i, j, i_end, j_end;
-	if(same_sign || cmp == 1) {
+	if(same_sign || cmp == ordering::greater) {
 		i = lhs.m_digits.rbegin(), i_end = lhs.m_digits.rend();
 		j = rhs.m_digits.rbegin(), j_end = rhs.m_digits.rend();
 	} else { // cmp == -1
@@ -99,7 +99,7 @@ BigInt operator*(const BigInt &lhs, const BigInt &rhs) {
 }
 
 std::pair<BigInt, BigInt> division(const BigInt &a, const BigInt &b) {
-	if(is_zero(a) || is_zero(b)) return { BigInt{ 0 }, BigInt{ 0 }};
+	if(a.is_zero() || b.is_zero()) return { BigInt{ 0 }, BigInt{ 0 }};
 	if(b.length() == 1 && b.m_digits.front() == 1) {
 		BigInt quotient{ a };
 		quotient.m_negative = a.m_negative ^ b.m_negative;

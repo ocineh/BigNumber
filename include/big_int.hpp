@@ -1,6 +1,7 @@
 #ifndef BIGINT_BIG_INT_HPP
 #define BIGINT_BIG_INT_HPP
 
+#include "ordering.hpp"
 #include <functional>
 #include <ostream>
 #include <list>
@@ -19,30 +20,23 @@ public:
 	BigInt(std::string const &str, std::locale const &locale);
 	explicit BigInt(long long int n);
 
-	friend int cmp(BigInt const &a, BigInt const &b);
-	int cmp(BigInt const &b) const;
-	friend int cmp_abs(BigInt const &a, BigInt const &b);
-	int cmp_abs(BigInt const &b) const;
+	// Comparison methods
+	[[nodiscard]] static ordering cmp(BigInt const &a, BigInt const &b);
+	[[nodiscard]] ordering cmp(BigInt const &b) const;
+	[[nodiscard]] static ordering cmp_abs(BigInt const &a, BigInt const &b);
+	[[nodiscard]] ordering cmp_abs(BigInt const &b) const;
 
-	friend BigInt abs(BigInt const &a);
-	BigInt abs() const;
-
-	friend bool is_zero(BigInt const &a);
-	bool is_zero() const;
-	friend bool is_NaN(BigInt const &a);
-	bool is_NaN() const;
-
-	friend bool is_even(BigInt const &a);
-	bool is_even() const;
-
-	friend bool is_odd(BigInt const &a);
-	bool is_odd() const;
-
-	friend std::size_t length(BigInt const &a);
-	std::size_t length() const;
+	// Utility methods
+	[[nodiscard]] BigInt abs() const;
+	[[nodiscard]] bool is_zero() const;
+	[[nodiscard]] bool is_NaN() const;
+	[[nodiscard]] bool is_even() const;
+	[[nodiscard]] bool is_odd() const;
+	[[nodiscard]] std::size_t length() const;
 
 	friend std::pair<BigInt, BigInt> division(BigInt const &lhs, BigInt const &rhs);
 
+	// I/O stream operators
 	friend std::ostream &operator<<(std::ostream &os, BigInt const &i);
 	friend std::istream &operator>>(std::istream &is, BigInt &i);
 
@@ -125,7 +119,7 @@ private:
 	void strip();
 	void clear();
 
-	BigInt mul_digit(unsigned char digit) const;
+	[[nodiscard]] BigInt mul_digit(unsigned char digit) const;
 };
 
 #endif //BIGINT_BIG_INT_HPP

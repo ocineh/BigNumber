@@ -63,46 +63,26 @@ void BigInt::strip() {
 	if(m_digits.empty()) m_digits.push_front(0);
 }
 
-BigInt abs(BigInt const &a) {
-	BigInt result{ a };
+BigInt BigInt::abs() const {
+	BigInt result{ *this };
 	result.m_negative = false;
 	return result;
 }
 
-BigInt BigInt::abs() const {
-	return ::abs(*this);
-}
-
-bool is_zero(const BigInt &a) {
-	return a.length() == 1 && a.m_digits.front() == 0;
-}
-
 bool BigInt::is_zero() const {
-	return ::is_zero(*this);
-}
-
-bool is_NaN(const BigInt &a) {
-	return a.m_digits.empty();
+	return length() == 1 && m_digits.front() == 0;
 }
 
 bool BigInt::is_NaN() const {
-	return ::is_NaN(*this);
-}
-
-bool is_even(BigInt const &a) {
-	return !is_NaN(a) && a.m_digits.back() % 2 == 0;
+	return m_digits.empty();
 }
 
 bool BigInt::is_even() const {
-	return ::is_even(*this);
-}
-
-bool is_odd(BigInt const &a) {
-	return !is_NaN(a) && a.m_digits.back() % 2 == 1;
+	return !is_NaN() && m_digits.back() % 2 == 0;
 }
 
 bool BigInt::is_odd() const {
-	return ::is_odd(*this);
+	return !is_NaN() && m_digits.back() % 2 == 1;
 }
 
 void BigInt::clear() {
@@ -110,10 +90,6 @@ void BigInt::clear() {
 	m_negative = false;
 }
 
-std::size_t length(const BigInt &a) {
-	return a.m_digits.size();
-}
-
 std::size_t BigInt::length() const {
-	return ::length(*this);
+	return m_digits.size();
 }

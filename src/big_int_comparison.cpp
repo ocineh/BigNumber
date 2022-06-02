@@ -1,65 +1,65 @@
 #include "big_int.hpp"
 
-int cmp(const BigInt &a, const BigInt &b) {
+ordering BigInt::cmp(const BigInt &a, const BigInt &b) {
 	if(a.m_negative != b.m_negative)
-		return a.m_negative ? -1 : 1;
+		return a.m_negative ? ordering::less : ordering::greater;
 
 	if(a.length() > b.length())
-		return a.m_negative ? -1 : 1;
+		return a.m_negative ? ordering::less : ordering::greater;
 	if(a.length() < b.length())
-		return a.m_negative ? 1 : -1;
+		return a.m_negative ? ordering::greater : ordering::less;
 
 	auto i = a.m_digits.begin(), end = a.m_digits.end();
 	auto j = b.m_digits.begin();
 	for(; i != end; ++i, ++j) {
-		if(*i < *j) return a.m_negative ? 1 : -1;
-		if(*i > *j) return a.m_negative ? -1 : 1;
+		if(*i < *j) return a.m_negative ? ordering::greater : ordering::less;
+		if(*i > *j) return a.m_negative ? ordering::less : ordering::greater;
 	}
-	return 0;
+	return ordering::equal;
 }
 
-int BigInt::cmp(const BigInt &b) const {
-	return (int) ::cmp(*this, b);
+ordering BigInt::cmp(const BigInt &b) const {
+	return BigInt::cmp(*this, b);
 }
 
-int cmp_abs(const BigInt &a, const BigInt &b) {
+ordering BigInt::cmp_abs(const BigInt &a, const BigInt &b) {
 	if(a.length() != b.length())
-		return (a.length() > b.length()) ? 1 : -1;
+		return (a.length() > b.length()) ? ordering::greater : ordering::less;
 
 	auto i = a.m_digits.begin(), end = a.m_digits.end();
 	auto j = b.m_digits.begin();
 	for(; i != end; ++i, ++j)
 		if(*i != *j)
-			return *i < *j ? -1 : 1;
-	return 0;
+			return *i < *j ? ordering::less : ordering::greater;
+	return ordering::equal;
 }
 
-int BigInt::cmp_abs(const BigInt &b) const {
-	return ::cmp_abs(*this, b);
+ordering BigInt::cmp_abs(const BigInt &b) const {
+	return BigInt::cmp_abs(*this, b);
 }
 
 bool operator==(const BigInt &lhs, const BigInt &rhs) {
-	return cmp(lhs, rhs) == 0;
+	return BigInt::cmp(lhs, rhs) == ordering::equal;
 }
 
 bool operator!=(const BigInt &lhs, const BigInt &rhs) {
-	return cmp(lhs, rhs) != 0;
+	return BigInt::cmp(lhs, rhs) != ordering::equal;
 }
 
 bool operator<(const BigInt &lhs, const BigInt &rhs) {
-	return cmp(lhs, rhs) < 0;
+	return BigInt::cmp(lhs, rhs) < ordering::equal;
 }
 
 bool operator>(const BigInt &lhs, const BigInt &rhs) {
-	return cmp(lhs, rhs) > 0;
+	return BigInt::cmp(lhs, rhs) > ordering::equal;
 }
 
 bool operator<=(const BigInt &lhs, const BigInt &rhs) {
-	return cmp(lhs, rhs) <= 0;
+	return BigInt::cmp(lhs, rhs) <= ordering::equal;
 }
 
 bool operator>=(const BigInt &lhs, const BigInt &rhs) {
-	return cmp(lhs, rhs) >= 0;
+	return BigInt::cmp(lhs, rhs) >= ordering::equal;
 }
 
 bool operator==(const BigInt &lhs, long long int rhs) {
