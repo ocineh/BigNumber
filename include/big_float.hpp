@@ -13,9 +13,7 @@ public:
 	~BigFloat() = default;
 
 	explicit BigFloat(
-			std::string const &str,
-			char decimal_separator = '.',
-			char thousands_separator = '\0',
+			std::string const &str, char decimal_separator = '.', char thousands_separator = '\0',
 			std::function<bool(char)> const &is_digit = isdigit
 	);
 	BigFloat(std::string const &str, std::locale const &locale);
@@ -33,7 +31,16 @@ public:
 	[[nodiscard]] BigFloat abs() const;
 	[[nodiscard]] bool is_zero() const;
 	[[nodiscard]] std::size_t length() const;
-	[[nodiscard]] std::string to_string() const;
+	[[nodiscard]] std::string to_string(
+			char decimal_separator = '.',
+			char thousands_separator = '\0',
+			std::size_t precision = 10
+	) const;
+	[[nodiscard]] std::string to_string(
+			std::size_t precision,
+			std::locale const &locale = std::locale()
+	) const;
+	[[nodiscard]] std::string to_string(std::locale const &locale) const;
 
 	// I/O stream operators
 	friend std::ostream &operator<<(std::ostream &os, const BigFloat &n);

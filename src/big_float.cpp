@@ -84,15 +84,7 @@ BigFloat BigFloat::abs() const {
 }
 
 std::ostream &operator<<(std::ostream &os, const BigFloat &n) {
-	if(n.is_NaN()) return os << "NaN";
-	if(n.m_negative) os << '-';
-	for(unsigned char const &c: n.m_before)
-		os << (char) (c + '0');
-	if(!n.m_after.empty())
-		os << std::use_facet<std::numpunct<char>>(os.getloc()).decimal_point();
-	for(unsigned char const &c: n.m_after)
-		os << (char) (c + '0');
-	return os;
+	return os << n.to_string(os.getloc());
 }
 
 bool BigFloat::is_NaN() const {
@@ -103,8 +95,44 @@ std::size_t BigFloat::length() const {
 	return m_before.size() + m_after.size();
 }
 
-std::string BigFloat::to_string() const {
-	std::stringstream ss;
-	ss << *this;
-	return ss.str();
+std::string
+BigFloat::to_string(char decimal_separator, char thousands_separator, std::size_t precision) const {
+	if(is_zero()) return "0";
+	if(is_NaN()) return "NaN";
+
+	std::ostringstream os;
+	if(m_negative) os << '-';
+	auto it = m_before.begin(), end = m_before.end();
+	for(std::size_t i = m_before.size() % 3; i > 0; --i, ++it)
+		os << (char) (*it + '0');
+	if(it != m_before.begin() && it != end && thousands_separator != '\0')
+		os << thousands_separator;
+
+	for(int i = 0; it != end; ++it, ++i) {
+		if(i == 3 && thousands_separator != '\0')
+			os << thousands_separator, i = 0;
+		os << (char) (*it + '0');
+	}
+
+	if(!m_after.empty()) {
+		os << decimal_separator;
+		it = m_after.begin(), end = m_after.end();
+		for(; it != end && precision > 0; ++it, --precision)
+			os << (char) (*it + '0');
+	}
+	return os.str();
+}
+
+std::string BigFloat::to_string(std::size_t precision, const std::locale &locale) const {
+	return to_string(
+			std::use_facet<std::numpunct<char>>(locale).decimal_point(),
+			std::use_facet<std::numpunct<char>>(locale).thousands_sep(),
+			precision
+	);
+}
+
+std::string BigFloat::to_string(std::locale const &locale) const {
+	return to_string(
+			std::use_facet<std::numpunct<char>>(locale).decimal_point(),
+			std::use_facet<std::numpunct<char>>(locale).thousands_sep());
 }
