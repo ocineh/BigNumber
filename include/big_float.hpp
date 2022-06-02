@@ -4,6 +4,7 @@
 #include <list>
 #include <ostream>
 #include <functional>
+#include "ordering.hpp"
 
 class BigFloat {
 public:
@@ -21,28 +22,18 @@ public:
 	explicit BigFloat(long double n);
 
 	// Comparison functions
-	friend int cmp(BigFloat const &a, BigFloat const &b);
-	int cmp(BigFloat const &b) const;
-	friend int cmp_abs(BigFloat const &a, BigFloat const &b);
-	int cmp_abs(BigFloat const &b) const;
+	[[nodiscard]] static ordering cmp(BigFloat const &a, BigFloat const &b);
+	[[nodiscard]] ordering cmp(BigFloat const &b) const;
+
+	[[nodiscard]] static ordering cmp_abs(BigFloat const &a, BigFloat const &b);
+	[[nodiscard]] ordering cmp_abs(BigFloat const &b) const;
 
 	// Utility functions
-	friend bool is_NaN(BigFloat const &n);
-	bool is_NaN() const;
-
-	friend BigFloat abs(BigFloat const &n);
-	BigFloat abs() const;
-
-	friend bool is_zero(BigFloat const &n);
-	bool is_zero() const;
-
-	friend std::size_t length(BigFloat const &n);
-	std::size_t length() const;
-
-	std::string to_string() const;
-
-	static char get_decimal_point();
-	static char get_thousands_sep();
+	[[nodiscard]] bool is_NaN() const;
+	[[nodiscard]] BigFloat abs() const;
+	[[nodiscard]] bool is_zero() const;
+	[[nodiscard]] std::size_t length() const;
+	[[nodiscard]] std::string to_string() const;
 
 	// I/O stream operators
 	friend std::ostream &operator<<(std::ostream &os, const BigFloat &n);
@@ -127,7 +118,7 @@ private:
 	void strip();
 	void clear();
 
-	BigFloat mul_digit(unsigned char digit) const;
+	[[nodiscard]] BigFloat mul_digit(unsigned char digit) const;
 };
 
 

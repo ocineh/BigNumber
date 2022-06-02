@@ -11,15 +11,15 @@ BigFloat operator>>(BigFloat const &n, std::size_t shift) {
 
 BigFloat operator+(BigFloat const &lhs, BigFloat const &rhs) {
 	BigFloat result;
-	if(is_NaN(lhs) || is_NaN(rhs)) return result;
+	if(lhs.is_NaN() || rhs.is_NaN()) return result;
 
 	// Determine the sign of the result
-	int cmp = cmp_abs(lhs, rhs);
+	ordering cmp = BigFloat::cmp_abs(lhs, rhs);
 	bool same_sign = lhs.m_negative == rhs.m_negative;
 	if(same_sign) result.m_negative = lhs.m_negative;
 	else {
-		if(cmp == -1) result.m_negative = rhs.m_negative;
-		else if(cmp == 1) result.m_negative = lhs.m_negative;
+		if(cmp == ordering::less) result.m_negative = rhs.m_negative;
+		else if(cmp == ordering::greater) result.m_negative = lhs.m_negative;
 		else { // x + -x = 0 or -x + x = 0
 			result.m_negative = false;
 			result.m_before.push_front(0);
@@ -30,7 +30,7 @@ BigFloat operator+(BigFloat const &lhs, BigFloat const &rhs) {
 	// Calculate the result
 	int carry = 0, sum;
 	std::list<unsigned char>::const_reverse_iterator i, j, i_end, j_end;
-	if(same_sign || cmp == 1) {
+	if(same_sign || cmp == ordering::greater) {
 		i = lhs.m_after.rbegin(), i_end = lhs.m_after.rend();
 		j = rhs.m_after.rbegin(), j_end = rhs.m_after.rend();
 	} else { // cmp == -1
@@ -65,7 +65,7 @@ BigFloat operator+(BigFloat const &lhs, BigFloat const &rhs) {
 		result.m_after.push_front(abs(sum % 10));
 	}
 
-	if(same_sign || cmp == 1) {
+	if(same_sign || cmp == ordering::greater) {
 		i = lhs.m_before.rbegin(), i_end = lhs.m_before.rend();
 		j = rhs.m_before.rbegin(), j_end = rhs.m_before.rend();
 	} else { // cmp == -1
@@ -111,14 +111,14 @@ BigFloat BigFloat::mul_digit(unsigned char digit) const {
 	for(; i != end; ++i) {
 		mul = *i * digit + carry;
 		carry = mul / 10;
-		result.m_after.push_front(mul % 10);
+		result.m_after.push_front((unsigned char) (mul % 10));
 	}
 
 	i = m_before.rbegin(), end = m_before.rend();
 	for(; i != end; ++i) {
 		mul = *i * digit + carry;
 		carry = mul / 10;
-		result.m_before.push_front(mul % 10);
+		result.m_before.push_front((unsigned char) (mul % 10));
 	}
 
 	if(carry != 0) result.m_before.push_front(carry);
@@ -126,9 +126,9 @@ BigFloat BigFloat::mul_digit(unsigned char digit) const {
 }
 
 BigFloat operator*(BigFloat const &lhs, BigFloat const &rhs) {
-	if(is_NaN(lhs) || is_NaN(rhs)) return {}; // NaN * anything = NaN
+	if(lhs.is_NaN() || rhs.is_NaN()) return {}; // NaN * anything = NaN
 	BigFloat result{ 0 };
-	if(is_zero(lhs) || is_zero(rhs)) return result;
+	if(lhs.is_zero() || rhs.is_zero()) return result;
 
 	BigFloat const *multiplicand, *multiplier;
 	if(lhs.length() > rhs.length()) multiplicand = &lhs, multiplier = &rhs;
@@ -152,8 +152,8 @@ BigFloat operator*(BigFloat const &lhs, BigFloat const &rhs) {
 }
 
 BigFloat operator/(BigFloat const &lhs, BigFloat const &rhs) {
-	if(is_NaN(lhs) || is_NaN(rhs) || is_zero(rhs)) return {};
-	if(is_zero(lhs)) return BigFloat{ 0 };
+	if(lhs.is_NaN() || rhs.is_NaN() || rhs.is_zero()) return {};
+	if(lhs.is_zero()) return BigFloat{ 0 };
 	if(rhs == BigFloat{ 1 }) return BigFloat{ lhs };
 	if(rhs == BigFloat{ -1 }) return -lhs;
 
@@ -183,14 +183,14 @@ BigFloat operator/(BigFloat const &lhs, BigFloat const &rhs) {
 }
 
 BigFloat operator%(BigFloat const &lhs, BigFloat const &rhs) {
-	if(is_NaN(lhs) || is_NaN(rhs) || is_zero(rhs)) return {};
-	if(is_zero(lhs)) return BigFloat{ 0 };
+	if(lhs.is_NaN() || rhs.is_NaN() || rhs.is_zero()) return {};
+	if(lhs.is_zero()) return BigFloat{ 0 };
 
 	BigFloat remainder = lhs.abs(), pas = rhs.abs();
 	if(pas.m_before.size() < remainder.m_before.size())
 		pas <<= remainder.m_before.size() - pas.m_before.size();
 
-	while(cmp_abs(remainder, rhs) >= 0) {
+	while(BigFloat::cmp_abs(remainder, rhs) >= ordering::equal) {
 		while(remainder < pas) pas >>= 1;
 		remainder -= pas;
 	}
