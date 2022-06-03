@@ -15,13 +15,13 @@ BigFloat operator+(BigFloat const &lhs, BigFloat const &rhs) {
 
 	// Determine the sign of the result
 	ordering cmp = BigFloat::cmp_abs(lhs, rhs);
-	bool same_sign = lhs.m_negative == rhs.m_negative;
-	if(same_sign) result.m_negative = lhs.m_negative;
+	bool same_sign = lhs.m_sign == rhs.m_sign;
+	if(same_sign) result.m_sign = lhs.m_sign;
 	else {
-		if(cmp == ordering::less) result.m_negative = rhs.m_negative;
-		else if(cmp == ordering::greater) result.m_negative = lhs.m_negative;
+		if(cmp == ordering::less) result.m_sign = rhs.m_sign;
+		else if(cmp == ordering::greater) result.m_sign = lhs.m_sign;
 		else { // x + -x = 0 or -x + x = 0
-			result.m_negative = false;
+			result.m_sign = sign::positive;
 			result.m_before.push_front(0);
 			return result;
 		}
@@ -147,7 +147,7 @@ BigFloat operator*(BigFloat const &lhs, BigFloat const &rhs) {
 		if(*i != 0)
 			result += multiplicand->mul_digit(*i) <<= rand;
 
-	result.m_negative = lhs.m_negative ^ rhs.m_negative;
+	result.m_sign = lhs.m_sign ^ rhs.m_sign;
 	return result;
 }
 
@@ -178,7 +178,7 @@ BigFloat operator/(BigFloat const &lhs, BigFloat const &rhs) {
 		unsigned char m = quotient.m_after.back();
 		quotient.m_after.push_back(m + (n > 5 ? 1 : 0));
 	}
-	quotient.m_negative = lhs.m_negative ^ rhs.m_negative;
+	quotient.m_sign = lhs.m_sign ^ rhs.m_sign;
 	return quotient;
 }
 
@@ -194,7 +194,7 @@ BigFloat operator%(BigFloat const &lhs, BigFloat const &rhs) {
 		while(remainder < pas) pas >>= 1;
 		remainder -= pas;
 	}
-	remainder.m_negative = lhs.m_negative;
+	remainder.m_sign = lhs.m_sign;
 	return remainder;
 }
 

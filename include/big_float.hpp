@@ -4,7 +4,7 @@
 #include <list>
 #include <ostream>
 #include <functional>
-#include "ordering.hpp"
+#include "utilities.hpp"
 
 class BigFloat {
 public:
@@ -30,6 +30,8 @@ public:
 	[[nodiscard]] bool is_NaN() const;
 	[[nodiscard]] BigFloat abs() const;
 	[[nodiscard]] bool is_zero() const;
+	[[nodiscard]] bool is_negative() const;
+	[[nodiscard]] bool is_positive() const;
 	[[nodiscard]] std::size_t length() const;
 	[[nodiscard]] std::string to_string(
 			char decimal_separator = '.',
@@ -118,7 +120,7 @@ public:
 	BigFloat &operator%=(long double n);
 
 private:
-	bool m_negative;
+	sign m_sign = sign::NaN;
 	std::list<unsigned char> m_before;
 	std::list<unsigned char> m_after;
 

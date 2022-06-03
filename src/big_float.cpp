@@ -36,9 +36,9 @@ BigFloat::BigFloat(
 		std::function<bool(char)> const &is_digit
 ) {
 	auto it = str.begin(), end = str.end();
-	if(*it == '-') m_negative = true, ++it;
-	else if(*it == '+') m_negative = false, ++it;
-	else if(is_digit(*it)) m_negative = false;
+	if(*it == '-') m_sign = sign::negative, ++it;
+	else if(*it == '+') m_sign = sign::positive, ++it;
+	else if(is_digit(*it)) m_sign = sign::positive;
 
 	for(; it != end && *it != decimal_separator; ++it) {
 		if(is_digit(*it)) m_before.push_back(ctou(*it));
@@ -60,7 +60,7 @@ BigFloat::BigFloat(
 		}
 	}
 	strip();
-	if(is_zero()) m_negative = false;
+	if(is_zero()) m_sign = sign::positive;
 }
 
 BigFloat::BigFloat(const std::string &str, const std::locale &locale) : BigFloat{
@@ -71,7 +71,6 @@ BigFloat::BigFloat(const std::string &str, const std::locale &locale) : BigFloat
 } {}
 
 BigFloat::BigFloat(long double n) {
-	m_negative = n < 0;
 	std::ostringstream os;
 	os << std::fixed << std::setprecision(std::numeric_limits<long double>::digits) << n;
 	*this = BigFloat{ os.str(), os.getloc() };
@@ -79,7 +78,7 @@ BigFloat::BigFloat(long double n) {
 
 BigFloat BigFloat::abs() const {
 	BigFloat result{ *this };
-	result.m_negative = false;
+	result.m_sign = sign::positive;
 	return result;
 }
 
@@ -88,7 +87,7 @@ std::ostream &operator<<(std::ostream &os, const BigFloat &n) {
 }
 
 bool BigFloat::is_NaN() const {
-	return m_before.empty();
+	return m_before.empty() || m_sign == sign::NaN;
 }
 
 std::size_t BigFloat::length() const {
@@ -101,7 +100,7 @@ BigFloat::to_string(char decimal_separator, char thousands_separator, std::size_
 	if(is_NaN()) return "NaN";
 
 	std::ostringstream os;
-	if(m_negative) os << '-';
+	if(is_negative()) os << '-';
 	auto it = m_before.begin(), end = m_before.end();
 	for(std::size_t i = m_before.size() % 3; i > 0; --i, ++it)
 		os << (char) (*it + '0');
@@ -135,4 +134,12 @@ std::string BigFloat::to_string(std::locale const &locale) const {
 	return to_string(
 			std::use_facet<std::numpunct<char>>(locale).decimal_point(),
 			std::use_facet<std::numpunct<char>>(locale).thousands_sep());
+}
+
+bool BigFloat::is_negative() const {
+	return m_sign == sign::negative;
+}
+
+bool BigFloat::is_positive() const {
+	return m_sign == sign::positive;
 }

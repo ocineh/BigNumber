@@ -1,19 +1,19 @@
 #include "big_int.hpp"
 
 ordering BigInt::cmp(const BigInt &a, const BigInt &b) {
-	if(a.m_negative != b.m_negative)
-		return a.m_negative ? ordering::less : ordering::greater;
+	if(a.is_negative() != b.is_negative())
+		return a.is_negative() ? ordering::less : ordering::greater;
 
 	if(a.length() > b.length())
-		return a.m_negative ? ordering::less : ordering::greater;
+		return a.is_negative() ? ordering::less : ordering::greater;
 	if(a.length() < b.length())
-		return a.m_negative ? ordering::greater : ordering::less;
+		return a.is_negative() ? ordering::greater : ordering::less;
 
 	auto i = a.m_digits.begin(), end = a.m_digits.end();
 	auto j = b.m_digits.begin();
 	for(; i != end; ++i, ++j) {
-		if(*i < *j) return a.m_negative ? ordering::greater : ordering::less;
-		if(*i > *j) return a.m_negative ? ordering::less : ordering::greater;
+		if(*i < *j) return a.is_negative() ? ordering::greater : ordering::less;
+		if(*i > *j) return a.is_negative() ? ordering::less : ordering::greater;
 	}
 	return ordering::equal;
 }

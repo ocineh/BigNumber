@@ -1,7 +1,7 @@
 #ifndef BIGINT_BIG_INT_HPP
 #define BIGINT_BIG_INT_HPP
 
-#include "ordering.hpp"
+#include "utilities.hpp"
 #include <functional>
 #include <ostream>
 #include <list>
@@ -30,6 +30,8 @@ public:
 	[[nodiscard]] BigInt abs() const;
 	[[nodiscard]] bool is_zero() const;
 	[[nodiscard]] bool is_NaN() const;
+	[[nodiscard]] bool is_negative() const;
+	[[nodiscard]] bool is_positive() const;
 	[[nodiscard]] bool is_even() const;
 	[[nodiscard]] bool is_odd() const;
 	[[nodiscard]] std::size_t length() const;
@@ -114,7 +116,7 @@ public:
 	BigInt &operator%=(long long rhs);
 
 private:
-	bool m_negative = false;
+	sign m_sign = sign::NaN;
 	std::list<unsigned char> m_digits;
 
 	void strip();

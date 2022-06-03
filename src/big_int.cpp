@@ -15,9 +15,9 @@ BigInt::BigInt(
 ) {
 	if(str.empty()) return;
 	auto it = str.begin(), end = str.end();
-	if(*it == '-') m_negative = true, ++it;
-	else if(*it == '+') m_negative = false, ++it;
-	else if(is_digit(*it)) m_negative = false;
+	if(*it == '-') m_sign = sign::negative, ++it;
+	else if(*it == '+') m_sign = sign::positive, ++it;
+	else if(is_digit(*it)) m_sign = sign::positive;
 
 	for(; it != end; ++it) {
 		if(*it == thousands_separator) continue;
@@ -27,7 +27,7 @@ BigInt::BigInt(
 		}
 		m_digits.push_back(ctou(*it));
 	}
-	if(m_digits.size() == 1 && m_digits.front() == 0) m_negative = false;
+	if(m_digits.size() == 1 && m_digits.front() == 0) m_sign = sign::positive;
 }
 
 BigInt::BigInt(std::string const &str, std::locale const &locale) : BigInt(
@@ -46,7 +46,7 @@ std::ostream &operator<<(std::ostream &os, const BigInt &i) {
 	if(i.is_NaN()) return os << "NaN";
 	if(i.is_zero()) return os << "0";
 
-	if(i.m_negative) os << '-';
+	if(i.is_negative()) os << '-';
 	auto it = i.m_digits.begin(), end = i.m_digits.end();
 	for(std::size_t j = i.m_digits.size() % 3; j > 0; --j, ++it)
 		os << (char) (*it + '0');
@@ -79,7 +79,7 @@ void BigInt::strip() {
 
 BigInt BigInt::abs() const {
 	BigInt result{ *this };
-	result.m_negative = false;
+	result.m_sign = sign::positive;
 	return result;
 }
 
@@ -88,7 +88,7 @@ bool BigInt::is_zero() const {
 }
 
 bool BigInt::is_NaN() const {
-	return m_digits.empty();
+	return m_digits.empty() || m_sign == sign::NaN;
 }
 
 bool BigInt::is_even() const {
@@ -101,7 +101,7 @@ bool BigInt::is_odd() const {
 
 void BigInt::clear() {
 	m_digits.clear();
-	m_negative = false;
+	m_sign = sign::NaN;
 }
 
 std::size_t BigInt::length() const {
@@ -113,4 +113,12 @@ std::string BigInt::to_string(std::locale const &locale) const {
 	ss.imbue(locale);
 	ss << *this;
 	return ss.str();
+}
+
+bool BigInt::is_negative() const {
+	return m_sign == sign::negative;
+}
+
+bool BigInt::is_positive() const {
+	return m_sign == sign::positive;
 }

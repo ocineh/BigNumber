@@ -1,28 +1,28 @@
 #include "big_float.hpp"
 
 ordering BigFloat::cmp(const BigFloat &a, const BigFloat &b) {
-	if(a.m_negative && !b.m_negative) return ordering::less;
-	if(!a.m_negative && b.m_negative) return ordering::greater;
+	if(a.is_negative() && !b.is_negative()) return ordering::less;
+	if(!a.is_negative() && b.is_negative()) return ordering::greater;
 
-	if(a.m_before.size() > b.m_before.size()) return a.m_negative ? ordering::less : ordering::greater;
-	if(a.m_before.size() < b.m_before.size()) return a.m_negative ? ordering::greater : ordering::less;
+	if(a.m_before.size() > b.m_before.size()) return a.is_negative() ? ordering::less : ordering::greater;
+	if(a.m_before.size() < b.m_before.size()) return a.is_negative() ? ordering::greater : ordering::less;
 	else {
 		auto i = a.m_before.begin(), end = a.m_before.end();
 		auto j = b.m_before.begin();
 		for(; i != end; ++i, ++j) {
-			if(*i < *j) return a.m_negative ? ordering::greater : ordering::less;
-			if(*i > *j) return a.m_negative ? ordering::less : ordering::greater;
+			if(*i < *j) return a.is_negative() ? ordering::greater : ordering::less;
+			if(*i > *j) return a.is_negative() ? ordering::less : ordering::greater;
 		}
 	}
 
 	auto i = a.m_after.begin(), i_end = a.m_after.end();
 	auto j = b.m_after.begin(), j_end = b.m_after.end();
 	for(; i != i_end && j != j_end; ++i, ++j) {
-		if(*i > *j) return a.m_negative ? ordering::less : ordering::greater;
-		if(*i < *j) return a.m_negative ? ordering::greater : ordering::less;
+		if(*i > *j) return a.is_negative() ? ordering::less : ordering::greater;
+		if(*i < *j) return a.is_negative() ? ordering::greater : ordering::less;
 	}
-	if(i != i_end) return a.m_negative ? ordering::less : ordering::greater;
-	if(j != j_end) return a.m_negative ? ordering::greater : ordering::less;
+	if(i != i_end) return a.is_negative() ? ordering::less : ordering::greater;
+	if(j != j_end) return a.is_negative() ? ordering::greater : ordering::less;
 	return ordering::equal;
 }
 

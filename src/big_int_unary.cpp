@@ -2,7 +2,7 @@
 
 BigInt operator-(BigInt const &i) {
 	BigInt result{ i };
-	result.m_negative = !result.m_negative;
+	result.m_sign = !result.m_sign;
 	return result;
 }
 

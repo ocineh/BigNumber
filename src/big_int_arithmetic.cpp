@@ -5,13 +5,13 @@ BigInt operator+(const BigInt &lhs, const BigInt &rhs) {
 
 	// Determine the sign of the result
 	ordering cmp = BigInt::cmp_abs(lhs, rhs);
-	bool same_sign = lhs.m_negative == rhs.m_negative;
-	if(same_sign) result.m_negative = lhs.m_negative;
+	bool same_sign = lhs.m_sign == rhs.m_sign;
+	if(same_sign) result.m_sign = lhs.m_sign;
 	else {
-		if(cmp == ordering::less) result.m_negative = rhs.m_negative;
-		else if(cmp == ordering::greater) result.m_negative = lhs.m_negative;
+		if(cmp == ordering::less) result.m_sign = rhs.m_sign;
+		else if(cmp == ordering::greater) result.m_sign = lhs.m_sign;
 		else { // x + -x = 0
-			result.m_negative = false;
+			result.m_sign = sign::positive;
 			result.m_digits.push_front(0);
 			return result;
 		}
@@ -70,7 +70,7 @@ BigInt BigInt::mul_digit(unsigned char digit) const {
 	if(digit == 1) return this->abs();
 
 	BigInt result;
-	result.m_negative = false;
+	result.m_sign = sign::positive;
 	auto i = m_digits.rbegin(), end = m_digits.rend();
 	int carry = 0, mul;
 	for(; i != end; ++i) {
@@ -94,7 +94,7 @@ BigInt operator*(const BigInt &lhs, const BigInt &rhs) {
 	for(; i != end; ++i, ++rand)
 		if(*i != 0)
 			result += multiplicand.mul_digit(*i) <<= rand;
-	result.m_negative = lhs.m_negative ^ rhs.m_negative;
+	result.m_sign = lhs.m_sign ^ rhs.m_sign;
 	return result;
 }
 
@@ -102,7 +102,7 @@ std::pair<BigInt, BigInt> division(const BigInt &a, const BigInt &b) {
 	if(a.is_zero() || b.is_zero()) return { BigInt{ 0 }, BigInt{ 0 }};
 	if(b.length() == 1 && b.m_digits.front() == 1) {
 		BigInt quotient{ a };
-		quotient.m_negative = a.m_negative ^ b.m_negative;
+		quotient.m_sign = a.m_sign ^ b.m_sign;
 		return { quotient, BigInt{ 0 }};
 	}
 
@@ -123,8 +123,8 @@ std::pair<BigInt, BigInt> division(const BigInt &a, const BigInt &b) {
 		quotient += count;
 	}
 
-	if(!remainder.is_zero()) remainder.m_negative = a.m_negative;
-	if(!quotient.is_zero()) quotient.m_negative = a.m_negative ^ b.m_negative;
+	if(!remainder.is_zero()) remainder.m_sign = a.m_sign;
+	if(!quotient.is_zero()) quotient.m_sign = a.m_sign ^ b.m_sign;
 	return { quotient, remainder };
 }
 
