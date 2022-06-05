@@ -47,16 +47,17 @@ std::ostream &operator<<(std::ostream &os, const BigInt &i) {
 	if(i.is_zero()) return os << "0";
 
 	if(i.is_negative()) os << '-';
-	auto it = i.m_digits.begin(), end = i.m_digits.end();
-	for(std::size_t j = i.m_digits.size() % 3; j > 0; --j, ++it)
+	auto it = i.m_digits.get_iterator();
+	std::size_t size = i.m_digits.size() % 3;
+	for(std::size_t j = size; j > 0; --j, ++it)
 		os << (char) (*it + '0');
-	if(it == end) return os;
+	if(!it.has_next()) return os;
 
 	char thousands_separator = std::use_facet<std::numpunct<char>>(os.getloc()).thousands_sep();
-	if(it != i.m_digits.begin() && it != end && thousands_separator != '\0')
+	if(size > 0 && thousands_separator != '\0')
 		os << thousands_separator;
 
-	for(int j = 0; it != end; ++j, ++it) {
+	for(int j = 0; it.has_next(); ++j, ++it) {
 		if(j == 3 && thousands_separator != '\0')
 			os << thousands_separator, j = 0;
 		os << (char) (*it + '0');

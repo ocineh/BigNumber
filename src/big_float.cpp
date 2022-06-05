@@ -101,13 +101,16 @@ BigFloat::to_string(char decimal_separator, char thousands_separator, std::size_
 
 	std::ostringstream os;
 	if(is_negative()) os << '-';
-	auto it = m_before.begin(), end = m_before.end();
-	for(std::size_t i = m_before.size() % 3; i > 0; --i, ++it)
+	auto it = m_before.get_iterator();
+	std::size_t size = m_before.size() % 3;
+	for(std::size_t i = size; i > 0; --i, ++it)
 		os << (char) (*it + '0');
-	if(it != m_before.begin() && it != end && thousands_separator != '\0')
+	if(!it.has_next()) return os.str();
+
+	if(size > 0 && thousands_separator != '\0')
 		os << thousands_separator;
 
-	for(int i = 0; it != end; ++it, ++i) {
+	for(int i = 0; it.has_next(); ++it, ++i) {
 		if(i == 3 && thousands_separator != '\0')
 			os << thousands_separator, i = 0;
 		os << (char) (*it + '0');
@@ -115,8 +118,8 @@ BigFloat::to_string(char decimal_separator, char thousands_separator, std::size_
 
 	if(!m_after.empty()) {
 		os << decimal_separator;
-		it = m_after.begin(), end = m_after.end();
-		for(; it != end && precision > 0; ++it, --precision)
+		it = m_after.get_iterator();
+		for(; it.has_next() && precision > 0; ++it, --precision)
 			os << (char) (*it + '0');
 	}
 	return os.str();

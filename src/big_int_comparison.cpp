@@ -9,9 +9,9 @@ ordering BigInt::cmp(const BigInt &a, const BigInt &b) {
 	if(a.length() < b.length())
 		return a.is_negative() ? ordering::greater : ordering::less;
 
-	auto i = a.m_digits.begin(), end = a.m_digits.end();
-	auto j = b.m_digits.begin();
-	for(; i != end; ++i, ++j) {
+	auto i = a.m_digits.get_iterator();
+	auto j = b.m_digits.get_iterator();
+	for(; i.has_next(); ++i, ++j) {
 		if(*i < *j) return a.is_negative() ? ordering::greater : ordering::less;
 		if(*i > *j) return a.is_negative() ? ordering::less : ordering::greater;
 	}
@@ -26,9 +26,9 @@ ordering BigInt::cmp_abs(const BigInt &a, const BigInt &b) {
 	if(a.length() != b.length())
 		return (a.length() > b.length()) ? ordering::greater : ordering::less;
 
-	auto i = a.m_digits.begin(), end = a.m_digits.end();
-	auto j = b.m_digits.begin();
-	for(; i != end; ++i, ++j)
+	auto i = a.m_digits.get_iterator();
+	auto j = b.m_digits.get_iterator();
+	for(; i.has_next(); ++i, ++j)
 		if(*i != *j)
 			return *i < *j ? ordering::less : ordering::greater;
 	return ordering::equal;

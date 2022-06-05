@@ -5,6 +5,7 @@
 #include <ostream>
 #include <functional>
 #include "utilities.hpp"
+#include "digits.hpp"
 
 class BigFloat {
 public:
@@ -13,7 +14,9 @@ public:
 	~BigFloat() = default;
 
 	explicit BigFloat(
-			std::string const &str, char decimal_separator = '.', char thousands_separator = '\0',
+			std::string const &str,
+			char decimal_separator = '.',
+			char thousands_separator = '\0',
 			std::function<bool(char)> const &is_digit = isdigit
 	);
 	BigFloat(std::string const &str, std::locale const &locale);
@@ -121,14 +124,13 @@ public:
 
 private:
 	sign m_sign = sign::NaN;
-	std::list<unsigned char> m_before;
-	std::list<unsigned char> m_after;
+	Digits m_before;
+	Digits m_after;
 
 	void strip();
 	void clear();
 
 	[[nodiscard]] BigFloat mul_digit(unsigned char digit) const;
 };
-
 
 #endif //BIGINT_BIG_FLOAT_HPP

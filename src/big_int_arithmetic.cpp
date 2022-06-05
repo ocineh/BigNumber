@@ -1,6 +1,9 @@
+#include <iostream>
 #include "big_int.hpp"
 
 BigInt operator+(const BigInt &lhs, const BigInt &rhs) {
+	if(lhs.is_zero()) return { rhs };
+	if(rhs.is_zero()) return { lhs };
 	BigInt result;
 
 	// Determine the sign of the result
@@ -18,17 +21,17 @@ BigInt operator+(const BigInt &lhs, const BigInt &rhs) {
 	}
 
 	// Calculate the result
-	std::list<unsigned char>::const_reverse_iterator i, j, i_end, j_end;
+	Digits::ReverseIterator i, j, i_end, j_end;
 	if(same_sign || cmp == ordering::greater) {
-		i = lhs.m_digits.rbegin(), i_end = lhs.m_digits.rend();
-		j = rhs.m_digits.rbegin(), j_end = rhs.m_digits.rend();
+		i = lhs.m_digits.get_reverse_iterator();
+		j = rhs.m_digits.get_reverse_iterator();
 	} else { // cmp == -1
-		i = rhs.m_digits.rbegin(), i_end = rhs.m_digits.rend();
-		j = lhs.m_digits.rbegin(), j_end = lhs.m_digits.rend();
+		i = rhs.m_digits.get_reverse_iterator();
+		j = lhs.m_digits.get_reverse_iterator();
 	}
 
 	int carry = 0, sum;
-	for(; i != i_end && j != j_end; ++i, ++j) {
+	for(; i.has_next() && j.has_next(); ++i, ++j) {
 		if(same_sign) sum = *i + *j + carry;
 		else if(*i == *j) sum = carry < 0 ? -(20 + carry) : carry;
 		else if(*i < *j) sum = -10 - (10 - (*j - *i - carry));
@@ -38,9 +41,8 @@ BigInt operator+(const BigInt &lhs, const BigInt &rhs) {
 		result.m_digits.push_front(abs(sum % 10));
 	}
 
-	auto it = i == i_end ? j : i;
-	auto end = i == i_end ? j_end : i_end;
-	for(; it != end; ++it) {
+	auto it = i.has_next() ? i : j;
+	for(; it.has_next(); ++it) {
 		if((-carry) > *it) sum = -10 - (10 - (*it + -carry));
 		else sum = *it + carry;
 
@@ -71,12 +73,12 @@ BigInt BigInt::mul_digit(unsigned char digit) const {
 
 	BigInt result;
 	result.m_sign = sign::positive;
-	auto i = m_digits.rbegin(), end = m_digits.rend();
+	auto i = m_digits.get_reverse_iterator();
 	int carry = 0, mul;
-	for(; i != end; ++i) {
+	for(; i.has_next(); ++i) {
 		mul = *i * digit + carry;
 		carry = mul / 10;
-		result.m_digits.push_front(mul % 10);
+		result.m_digits.push_front((unsigned char) (mul % 10));
 	}
 	if(carry != 0) result.m_digits.push_front(carry);
 	return result;
@@ -87,11 +89,10 @@ BigInt operator*(const BigInt &lhs, const BigInt &rhs) {
 	const BigInt &multiplicand = reverse ? rhs : lhs;
 	const BigInt &multiplier = reverse ? lhs : rhs;
 
-	auto i = multiplier.m_digits.rbegin();
-	auto end = multiplier.m_digits.rend();
+	auto i = multiplier.m_digits.get_reverse_iterator();
 	BigInt result{ 0 };
 	unsigned long long rand = 0;
-	for(; i != end; ++i, ++rand)
+	for(; i.has_next(); ++i, ++rand)
 		if(*i != 0)
 			result += multiplicand.mul_digit(*i) <<= rand;
 	result.m_sign = lhs.m_sign ^ rhs.m_sign;

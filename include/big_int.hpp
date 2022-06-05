@@ -2,6 +2,7 @@
 #define BIGINT_BIG_INT_HPP
 
 #include "utilities.hpp"
+#include "digits.hpp"
 #include <functional>
 #include <ostream>
 #include <list>
@@ -117,7 +118,7 @@ public:
 
 private:
 	sign m_sign = sign::NaN;
-	std::list<unsigned char> m_digits;
+	Digits m_digits;
 
 	void strip();
 	void clear();

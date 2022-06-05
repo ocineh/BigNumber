@@ -29,33 +29,32 @@ BigFloat operator+(BigFloat const &lhs, BigFloat const &rhs) {
 
 	// Calculate the result
 	int carry = 0, sum;
-	std::list<unsigned char>::const_reverse_iterator i, j, i_end, j_end;
+	Digits::ReverseIterator i, j, i_end, j_end;
+	std::size_t size_i, size_j;
 	if(same_sign || cmp == ordering::greater) {
-		i = lhs.m_after.rbegin(), i_end = lhs.m_after.rend();
-		j = rhs.m_after.rbegin(), j_end = rhs.m_after.rend();
+		i = lhs.m_after.get_reverse_iterator();
+		j = rhs.m_after.get_reverse_iterator();
+		size_i = lhs.m_after.size(), size_j = rhs.m_after.size();
 	} else { // cmp == -1
-		i = rhs.m_after.rbegin(), i_end = rhs.m_after.rend();
-		j = lhs.m_after.rbegin(), j_end = lhs.m_after.rend();
+		i = rhs.m_after.get_reverse_iterator();
+		j = lhs.m_after.get_reverse_iterator();
+		size_i = rhs.m_after.size(), size_j = lhs.m_after.size();
 	}
 
-	{
-		long size_i{ std::distance(i, i_end) };
-		long size_j{ std::distance(j, j_end) };
-		if(size_i > size_j)
-			for(long k{ size_i - size_j }; k > 0; --k, ++i)
-				result.m_after.push_front(*i);
-		else if(size_i < size_j) {
-			for(long k{ size_j - size_i }; k > 0; --k, ++j) {
-				if(!same_sign) sum = -10 - (10 - *j + carry);
-				else if((-carry) > (*j)) sum = -10 - (10 - (*j) - carry);
-				else sum = *j + carry;
-				carry = sum / 10;
-				result.m_after.push_front(abs(sum % 10));
-			}
+	if(size_i > size_j)
+		for(std::size_t k{ size_i - size_j }; k > 0; --k, ++i)
+			result.m_after.push_front(*i);
+	else if(size_i < size_j) {
+		for(std::size_t k{ size_j - size_i }; k > 0; --k, ++j) {
+			if(!same_sign) sum = -10 - (10 - *j + carry);
+			else if((-carry) > (*j)) sum = -10 - (10 - (*j) - carry);
+			else sum = *j + carry;
+			carry = sum / 10;
+			result.m_after.push_front(abs(sum % 10));
 		}
 	}
 
-	for(; i != i_end && j != j_end; ++i, ++j) {
+	for(; i.has_next() && j.has_next(); ++i, ++j) {
 		if(same_sign) sum = *i + *j + carry;
 		else if(*i == *j) sum = carry < 0 ? -(20 + carry) : carry;
 		else if(*i < *j) sum = -10 - (10 - (*j - *i - carry));
@@ -66,13 +65,13 @@ BigFloat operator+(BigFloat const &lhs, BigFloat const &rhs) {
 	}
 
 	if(same_sign || cmp == ordering::greater) {
-		i = lhs.m_before.rbegin(), i_end = lhs.m_before.rend();
-		j = rhs.m_before.rbegin(), j_end = rhs.m_before.rend();
+		i = lhs.m_before.get_reverse_iterator();
+		j = rhs.m_before.get_reverse_iterator();
 	} else { // cmp == -1
-		i = rhs.m_before.rbegin(), i_end = rhs.m_before.rend();
-		j = lhs.m_before.rbegin(), j_end = lhs.m_before.rend();
+		i = rhs.m_before.get_reverse_iterator();
+		j = lhs.m_before.get_reverse_iterator();
 	}
-	for(; i != i_end && j != j_end; ++i, ++j) {
+	for(; i.has_next() && j.has_next(); ++i, ++j) {
 		if(same_sign) sum = *i + *j + carry;
 		else if(*i == *j) sum = carry < 0 ? -(20 + carry) : carry;
 		else if(*i < *j) sum = -10 - (10 - (*j - *i - carry));
@@ -82,9 +81,8 @@ BigFloat operator+(BigFloat const &lhs, BigFloat const &rhs) {
 		result.m_before.push_front(abs(sum % 10));
 	}
 
-	auto it = &(i == i_end ? j : i);
-	auto end = i == i_end ? j_end : i_end;
-	for(; *it != end; ++(*it)) {
+	auto it = &(i.has_next() ? i : j);
+	for(; it->has_next(); ++(*it)) {
 		if((-carry) > (**it)) sum = -10 - (10 - ((**it) + -carry));
 		else sum = (**it) + carry;
 
@@ -105,17 +103,17 @@ BigFloat BigFloat::mul_digit(unsigned char digit) const {
 	if(digit == 1) return this->abs();
 
 	BigFloat result{};
-	std::list<unsigned char>::const_reverse_iterator i, end;
-	i = m_after.rbegin(), end = m_after.rend();
+	Digits::ReverseIterator i, end;
+	i = m_after.get_reverse_iterator();
 	int carry = 0, mul;
-	for(; i != end; ++i) {
+	for(; i.has_next(); ++i) {
 		mul = *i * digit + carry;
 		carry = mul / 10;
 		result.m_after.push_front((unsigned char) (mul % 10));
 	}
 
-	i = m_before.rbegin(), end = m_before.rend();
-	for(; i != end; ++i) {
+	i = m_before.get_reverse_iterator();
+	for(; i.has_next(); ++i) {
 		mul = *i * digit + carry;
 		carry = mul / 10;
 		result.m_before.push_front((unsigned char) (mul % 10));
@@ -134,16 +132,16 @@ BigFloat operator*(BigFloat const &lhs, BigFloat const &rhs) {
 	if(lhs.length() > rhs.length()) multiplicand = &lhs, multiplier = &rhs;
 	else multiplicand = &rhs, multiplier = &lhs;
 
-	std::list<unsigned char>::const_reverse_iterator i, end;
+	Digits::ReverseIterator i, end;
 	std::size_t rand = multiplier->m_after.size();
-	i = std::rbegin(multiplier->m_after), end = std::rend(multiplier->m_after);
-	for(; i != end; ++i, --rand)
+	i = multiplier->m_after.get_reverse_iterator();
+	for(; i.has_next(); ++i, --rand)
 		if(*i != 0)
 			result += multiplicand->mul_digit(*i) >>= rand;
 
-	i = std::rbegin(multiplier->m_before), end = std::rend(multiplier->m_before);
+	i = multiplier->m_before.get_reverse_iterator();
 	rand = 0;
-	for(; i != end; ++i, ++rand)
+	for(; i.has_next(); ++i, ++rand)
 		if(*i != 0)
 			result += multiplicand->mul_digit(*i) <<= rand;
 
